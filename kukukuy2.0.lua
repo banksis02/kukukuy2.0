@@ -71,6 +71,8 @@ local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Mouse = LocalPlayer:GetMouse()
+local ReplicatedFirst = game:GetService("ReplicatedFirst")
+local playerGui = LocalPlayer:WaitForChild("PlayerGui")
 
 httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
 JobId = game.JobId
@@ -1883,13 +1885,12 @@ if game.PlaceId == 8304191830 then
 end
 --#endregion
 -----------------
-
 --#region Setting Script
-local a = 'ProjectX' -- Paste Name
+local a = 'IprojectX' -- Paste Name
 if not isfolder(a) then
 	makefolder(a)
 end
-getgenv().savefilename = "ProjectX/ProjectX." .. game.Players.LocalPlayer.Name .. ".json"
+getgenv().savefilename = "IprojectX/autoProjectX." .. game.Players.LocalPlayer.Name .. ".json"
 getgenv().door = "_lobbytemplategreen1"
 -----------------------------------------------------------------
 --#endregion
@@ -1940,6 +1941,7 @@ function handle_select_units()
     end
   end
 end
+
 --#endregion
 
 --#region GetCurrentLevelName
@@ -2193,7 +2195,7 @@ function update_data()
 		elseif name == "entertainment_district_item" then
 			entertainShard = tostring(amount or 0)
 		elseif name == "six_eyes" then
-            six_eye = tostring(amount or 0)
+			six_eye = tostring(amount or 0)
 		end
 	end
 
@@ -2220,7 +2222,7 @@ function update_data()
     result = "พ่ายแพ้"
   end
 	print('Log 3')
-  if getgenv().waveteleport then
+  if getgenv().autoSelectMode == "ฟาร์มเพชร" then
     gem_reward = tostring(LocalPlayer.PlayerGui.Waves.HealthBar.IngameRewards.GemRewardTotal.Holder.Main.Amount.Text)
     total_wave = tostring(Workspace["_wave_num"].Value)
     total_time = disp_time(os.difftime(getgenv().end_time, getgenv().start_time))
@@ -2228,9 +2230,15 @@ function update_data()
 	print('Log 4')
 
 	myGems = getgenv().resultGems + gem_reward
-	permeNategems = myGems + getgems
+	if getgenv().autoSelectMode == "ฟาร์มเพชร" then
+		getgenv().textGem = getgenv().textGem - gem_reward
+	else
+		getgenv().textGem = getgenv().textGem - 0
+	end
+	permeNategems = myGems + getgenv().textGem
 	getgenv().resultGems = myGems
 	updatejson()
+
 	print('Log 6')
 
   return {
@@ -2240,26 +2248,26 @@ function update_data()
     ["embeds"] = {
       {
         ["author"] = {
-          ["name"] = "  "
-        },
-        ["title"] =" <a:jj:1101312850292637848>".."════┇ GGx Shop ┇════".." <a:jj:1101312850292637848>",
-        ["color"] = 0xFF00FF,
-        ["thumbnail"] = {
-          ["url"] = get_user_img_url(),
+			["name"] = "  "
+		  },
+		  ["title"] =" <a:jj:1101312850292637848>".."════┇ GGx Shop ┇════".." <a:jj:1101312850292637848>",
+		  ["color"] = 0xFF00FF,
+		  ["thumbnail"] = {
+			["url"] = get_user_img_url(),
         },
         ["fields"] = {
 			{
-				["name"] ="<a:scribbleheartcut:1101245449156968528>ไอดีลูกกระจ๊อก<a:scribbleheartcut:1101245449156968528>",
-				["value"] = "<a:cute:1101245437706514462> ID: "..LocalPlayer.Name,
-				["inline"] = false
-			  },
+			["name"] ="<a:scribbleheartcut:1101245449156968528>ไอดีลูกกระจ๊อก<a:scribbleheartcut:1101245449156968528>",
+			["value"] = "<a:cute:1101245437706514462> ID: "..LocalPlayer.Name,
+			["inline"] = false
+			},
           {
             ["name"] ="<a:emoji_15:1044255481385992213>ข้อมูลลูกค้า<a:emoji_15:1044255481385992213>",
             ["value"] = " <a:DG_diamond:1044133795919581194> <a:gif50:1101226864632139866> เพชร: " .. total_gems .."\n<a:emoji_15:1044134321646227507> <a:gif50:1101226864632139866> เพชรที่ต้องฟาร์ม: " .. myGems .."/".. permeNategems .. "\n<a:twitch_money:1101227068198506577> <a:gif50:1101226864632139866> เลเวล: " .. user_level:split(" ")[2] .. " " .. user_level:split(" ")[3] .. "\n<a:study:1092696615313227776> <a:gif50:1101226864632139866> แบทเทิลพาส: " .. tostring(getgenv().BattlePass),
             ["inline"] = false
           },
           {
-            ["name"] ="<a:emoji_15:1044255481385992213>ไอเท็ม Raids<a:emoji_15:1044255481385992213>",
+			["name"] ="<a:emoji_15:1044255481385992213>ไอเท็ม Raids<a:emoji_15:1044255481385992213>",
             ["value"] = "<:Alien_Scouter:1086919543034753114> <a:gif50:1101226864632139866> Alien Scouter: x" .. alien_scouter .. "\n<:Tomoe:1086919541092790362> <a:gif50:1101226864632139866> Tomoe: x" .. tomoe .. "\n<:relic_syn:1087136153334980798> <a:gif50:1101226864632139866> Relic Shard: x" .. relicShard .. "\n<:Wisteria_Bloom:1099264528853770271> <a:gif50:1101226864632139866> Entertain Shard: x" .. entertainShard .. "\n<:Rikugan_Eye:1096869167002550282> <a:gif50:1101226864632139866> Rikugan Eye: x" .. six_eye .. "\n<:EngVhzGImgur:1093249480154947726> <a:gif50:1101226864632139866> Demon Shard: x" .. demonShard,
             ["inline"] = false
           },
@@ -2268,10 +2276,10 @@ function update_data()
             ["value"] = "<:Demon_Leaders_Portal:1087031381361700906> <a:gif50:1101226864632139866> Demon Leader's Portal: x" .. demon_portal .. "\n<:Alien_Portal:1094173284905533490> <a:gif50:1101226864632139866> Alien Portal: x" .. alien_portal .. "\n<:demonAcademy:1093581550207111269> <a:gif50:1101226864632139866> Demon Academy Portal: x" .. devil_Academy,
             ["inline"] = false
           },
-					{
-            ["name"] ="<a:emoji_15:1044255481385992213>ไอเท็ม Event<a:emoji_15:1044255481385992213>",
-            ["value"] = "<:easter_egg_1:1095132443884925070> <a:gif50:1101226864632139866> Spotted Egg: x" .. easter_egg_1 .. "\n<:easter_egg_2:1095132446946770955> <a:gif50:1101226864632139866> Flower Egg: x" .. easter_egg_2  .. "\n<:easter_egg_3:1095132449136189510> <a:gif50:1101226864632139866> Striped Egg: x" .. easter_egg_3  .. "\n<:easter_egg_4:1095132452487442473> <a:gif50:1101226864632139866> Starry Egg: x" .. easter_egg_4  .. "\n<:easter_egg_5:1095132456643985440> <a:gif50:1101226864632139866> Strange Egg: x" .. easter_egg_5  .. "\n<:easter_egg_6:1095132460146241566> <a:gif50:1101226864632139866> Golden Egg: x" .. easter_egg_6 ,
-            ["inline"] = false
+			{
+			["name"] ="<a:emoji_15:1044255481385992213>ไอเท็ม Event<a:emoji_15:1044255481385992213>",
+			["value"] = "<:easter_egg_1:1095132443884925070> <a:gif50:1101226864632139866> Spotted Egg: x" .. easter_egg_1 .. "\n<:easter_egg_2:1095132446946770955> <a:gif50:1101226864632139866> Flower Egg: x" .. easter_egg_2  .. "\n<:easter_egg_3:1095132449136189510> <a:gif50:1101226864632139866> Striped Egg: x" .. easter_egg_3  .. "\n<:easter_egg_4:1095132452487442473> <a:gif50:1101226864632139866> Starry Egg: x" .. easter_egg_4  .. "\n<:easter_egg_5:1095132456643985440> <a:gif50:1101226864632139866> Strange Egg: x" .. easter_egg_5  .. "\n<:easter_egg_6:1095132460146241566> <a:gif50:1101226864632139866> Golden Egg: x" .. easter_egg_6 ,
+			["inline"] = false
           },
           {
             ["name"] ="<a:emoji_15:1044255481385992213>ไอเท็ม Challenges<a:emoji_15:1044255481385992213>",
@@ -2311,25 +2319,6 @@ end
 function update_data_Finish()
 	getgenv().end_time = os.time()
 
-	local itemDifference = getItemChangesNormal(getgenv().startingInventoryNormalItems, getNormalItems())
-	local TextDropLabel = ""
-  local CountAmount = 1
-
-	for name, amount in pairs(itemDifference) do
-		for code , nameCode in pairs(Table_All_Items_New_data) do
-			if code == name then
-				TextDropLabel = TextDropLabel .. tostring(CountAmount) .. ". " .. tostring(nameCode["Name"]) .. " : " .. tostring(amount) .. "\n"
-				CountAmount = CountAmount + 1
-				break
-			end
-		end
-	end
-
-  if TextDropLabel == "" then
-    TextDropLabel = "ไม่มีไอเท็มที่ได้รับ"
-  end
-
-	print('Log 1')
   user_level = tostring(LocalPlayer.PlayerGui.spawn_units.Lives.Main.Desc.Level.Text)
 	total_gems = tostring(LocalPlayer._stats.gem_amount.Value)
 	gem_reward = tostring(LocalPlayer.PlayerGui.ResultsUI.Holder.LevelRewards.ScrollingFrame.GemReward.Main.Amount.Text)
@@ -2339,82 +2328,6 @@ function update_data_Finish()
 	total_time = tostring(LocalPlayer.PlayerGui.ResultsUI.Holder.Middle.Timer.Text):split(": ")[2]
 	result = tostring(LocalPlayer.PlayerGui.ResultsUI.Holder.Title.Text)
 
-	local itemInventory = getNormalItems()
-	local portal_name = getCSMPortals()
-	local demon_portal = 0
-	local alien_portal = 0
-	local devil_Academy = 0
-	local alien_scouter = 0
-	local tomoe = 0
-	local relicShard = 0
-	local starfruit = 0
-	local starfruit_rainbow = 0
-	local starfruit_green = 0
-	local starfruit_red = 0
-	local starfruit_blue = 0
-	local starfruit_pink = 0
-	local demonShard = 0
-	--//Egg
-	local easter_egg_1 = 0
-	local easter_egg_2 = 0
-	local easter_egg_3 = 0
-	local easter_egg_4 = 0
-	local easter_egg_5 = 0
-	local easter_egg_6 = 0
-	--// end Egg
-	for name, amount in pairs(itemInventory) do
-
-		if name == "west_city_frieza_item" then
-			alien_scouter = tostring(amount or 0)
-		elseif name == "uchiha_item" then
-			tomoe = tostring(amount or 0)
-		elseif name == "relic_shard" then
-			relicShard = tostring(amount or 0)
-		elseif name == "StarFruit" then
-			starfruit = tostring(amount or 0)
-		elseif name == "StarFruitEpic" then
-			starfruit_rainbow = tostring(amount or 0)
-		elseif name == "StarFruitGreen" then
-			starfruit_green = tostring(amount or 0)
-		elseif name == "StarFruitRed" then
-			starfruit_red = tostring(amount or 0)
-		elseif name == "StarFruitBlue" then
-			starfruit_blue = tostring(amount or 0)
-		elseif name == "StarFruitPink" then
-			starfruit_pink = tostring(amount or 0)
-		elseif name == "april_symbol" then
-			demonShard = tostring(amount or 0)
-		elseif name == "easter_egg_1" then
-			easter_egg_1 = tostring(amount or 0)
-		elseif name == "easter_egg_2" then
-			easter_egg_2 = tostring(amount or 0)
-		elseif name == "easter_egg_3" then
-			easter_egg_3 = tostring(amount or 0)
-		elseif name == "easter_egg_4" then
-			easter_egg_4 = tostring(amount or 0)
-		elseif name == "easter_egg_5" then
-			easter_egg_5 = tostring(amount or 0)
-		elseif name == "easter_egg_6" then
-			easter_egg_6 = tostring(amount or 0)
-		end
-	end
-
-	
-
-	for i, v in pairs(portal_name) do
-		if v["item_id"] == "portal_zeldris" then
-			demon_portal = demon_portal + 1
-		elseif v["item_id"] == "portal_boros_g"  then
-			alien_portal = alien_portal + 1
-		elseif v["item_id"] == "april_portal_item"  then
-			devil_Academy = devil_Academy + 1
-		end
-	end
-
-	print('Log 2')
-
-
-
 	if gem_reward == "+99999" then gem_reward = "+0" end
 	if xp_reward == "+99999" then xp_reward = "+0" end
 	if trophy_reward == "+99999" then trophy_reward = "+0" end
@@ -2423,7 +2336,7 @@ function update_data_Finish()
   else
     result = "พ่ายแพ้"
   end
-  if getgenv().waveteleport then
+  if getgenv().autoSelectMode == "ฟาร์มเพชร" then
     gem_reward = tostring(LocalPlayer.PlayerGui.Waves.HealthBar.IngameRewards.GemRewardTotal.Holder.Main.Amount.Text)
     total_wave = tostring(Workspace["_wave_num"].Value)
     total_time = disp_time(os.difftime(getgenv().end_time, getgenv().start_time))
@@ -2473,12 +2386,13 @@ function webhook_finish()
     request = http_request or request or HttpPost or syn.request or http.request
     local http = { Url = url, Body = body, Method = "POST", Headers = headers }
     request(http)
-		task.wait(3)
-		if getgenv().jobID ~= "" then
-			game:GetService("TeleportService"):TeleportToPlaceInstance(8304191830, getgenv().jobID,  game.Players.LocalPlayer)
-		else
-			game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
-		end
+		getgenv().resultGems = 0
+		getgenv().autostart = false
+		updatejson()
+		task.wait(2)
+		--Nexus:SetAutoRelaunch(false)
+		task.wait(2)
+		game:Shutdown()
   end)
 end
 --#endregion
@@ -2515,783 +2429,440 @@ function PjxInit()
 		ConfigFolder = "ProjectX" 
 	}) -- TITLE
 
-	getgenv().portalnameX = data.portalnameX
-	getgenv().farmprotal = data.farmportal
-	getgenv().buyportal = data.buyportal
-	getgenv().PortalID = data.PortalID
-	getgenv().raid_strom = data.RaidStrom
-	getgenv().westCity = data.westCity
-	getgenv().demonSlayer = data.demonSlayer
-	getgenv().aotRaid = data.aotRaid
-	getgenv().raid_freeze = data.raid_freeze
-	getgenv().raid_entertainment = data.raid_entertainment
-	getgenv().SendVilla = data.SendVilla
-	getgenv().warpfriend = data.warpfriend
-	getgenv().takeTime = data.takeTime
-	getgenv().AutoLeave = data.AutoLeave
-	getgenv().AutoReplay = data.AutoReplay
-	getgenv().AutoChallenge = data.AutoChallenge
-	getgenv().selectedreward = data.selectedreward
-	getgenv().AutoChallengeAll = data.AutoChallengeAll
-	getgenv().disableatuofarm = false
-	getgenv().sellatwave = data.sellatwave
-	getgenv().lockfps = data.lockfps
-	getgenv().waveteleport = data.waveteleport
-	getgenv().dunj1 = data.dunj1
-	getgenv().dunj2 = data.dunj2
-	getgenv().dunj3 = data.dunj3
-	getgenv().dunjnew = data.dunjnew
-	getgenv().BattlePass = data.BattlePass
-	getgenv().friendOnly = data.friendOnly
-	getgenv().questtoday = data.questtoday
-	getgenv().antiafk = data.antiafk
-	getgenv().followjoin = data.followjoin
-	getgenv().renderring = data.renderring
-  getgenv().levels = data.levels
-	getgenv().fpsboots = data.fpsboots
-	getgenv().openlockfps = data.openlockfps
-	getgenv().getgems = data.getgems
-	getgenv().autoportal = data.autoportal
-	getgenv().autosell = data.autosell
-	getgenv().autogems = data.autogems
-	getgenv().AutoFarm = data.autofarm
-	getgenv().AutoFarmIC = data.autofarmic
-	getgenv().AutoFarmTP = data.autofarmtp
-	getgenv().AutoLoadTP = data.autoloadtp
-	getgenv().jobID = data.ijobID
-	getgenv().ShopGold = data.ShopGold
+	-- Save Script
+	getgenv().AutoLoadTP = data.AutoLoadTP or true
+	-- Warp Friends
+	getgenv().warpfriend = data.warpfriend or false
+
+	--Suto Start
+	getgenv().autostart = data.autostart or false
+	getgenv().AutoReplay = data.AutoReplay or false
+	--Select Mode
+	getgenv().autoSelectMode = data.autoSelectMode or "เลือกโหมดที่ต้องการฟาร์ม"
+	getgenv().textGem = data.textGem or 0
 	getgenv().resultGems = data.resultGems or 0
-	getgenv().nextStoryauto = data.nextStoryauto or false
-	-- getgenv().weburl = data.webhook
-	-- getgenv().weburlfinish = data.weburlfinish
-	-- getgenv().dctage = data.dctage 
+
+	--BattlePass
+	getgenv().BattlePass = data.BattlePass or 0
+
+	-- Select Item Raid
+	getgenv().autoSelectItem = data.autoSelectItem or "เลือกไอเท็มเรท"
+
+	-- Map
+	getgenv().world = data.world
+	getgenv().levels = data.levels
+	getgenv().level = data.level
+	getgenv().difficulty = data.difficulty
+
+	-- WebHook
 	getgenv().weburl = "https://discordapp.com/api/webhooks/1101553771663868055/LxQbGxqRQgqv5qu45IdUWvfSzI9Dm0Jxpa-MvMs39XCjtZLgsCyCQXxwhhCaonCodIvs"
 	getgenv().weburlfinish = "https://discordapp.com/api/webhooks/1101553908901498994/i2xNsFDQuSUTi5NVhcvn_ZrFWnRDe9QxYtC-wS1cwwqDYaJq-TMg8Hp1VBSFgd0ZlrxU"
 	getgenv().dctage = "1007497655653498950"
-	getgenv().autostart = data.autostart
-	getgenv().autostartStory = data.autostartStory
-	getgenv().autoupgrade = data.autoupgrade
-	getgenv().nextLevelINF = data.nextLevelINF
-	getgenv().difficulty = data.difficulty
-	getgenv().world = data.world
-	getgenv().level = data.level
-	getgenv().timelock = data.timelock
-	getgenv().SelectedUnits = data.xselectedUnits
-	getgenv().autoabilities = data.autoabilities
-	getgenv().takeTimeRaid = data.takeTimeRaid
-	getgenv().clickTeleport = data.clickTeleport
-	getgenv().Buyer1 = data.Buyer1
-	getgenv().Buyer2 = data.Buyer2
-	getgenv().Buyer3 = data.Buyer3
-	getgenv().removeMap = data.removeMap
+	-- Lock FPS
+	getgenv().lockfps = data.lockfps or false
+	getgenv().renderring = data.renderring or false
+	-- Other
+	getgenv().questtoday = data.questtoday  or true
+	-- Job ID
+	getgenv().jobID = data.jobID or ""
+
+	-- Select Unit
+	getgenv().SelectedUnits = data.xselectedUnits or {}
 
 	function updatejson()
 		local xdata = {
-			portalnameX = getgenv().portalnameX,
-			farmportal = getgenv().farmprotal,
-			buyportal = getgenv().buyportal,
-			PortalID = getgenv().PortalID,
-			RaidStrom = getgenv().raid_strom,
-			westCity = getgenv().westCity,
-			clickTeleport = getgenv().clickTeleport,
-			demonSlayer = getgenv().demonSlayer,
-			aotRaid = getgenv().aotRaid,
-			SendVilla = getgenv().SendVilla,
-			takeTime = getgenv().takeTime,
-			takeTimeRaid = getgenv().takeTimeRaid,
-			removeMap = getgenv().removeMap,
-			raid_freeze = getgenv().raid_freeze,
-			raid_entertainment = getgenv().raid_entertainment,
-			AutoLeave = getgenv().AutoLeave,
-			AutoReplay = getgenv().AutoReplay,
-			AutoChallenge = getgenv().AutoChallenge,
-			selectedreward = getgenv().selectedreward,
-			AutoChallengeAll = getgenv().AutoChallengeAll,
-			sellatwave = getgenv().sellatwave,
-			lockfps = getgenv().lockfps,
-			followjoin = getgenv().followjoin,
-      levels = getgenv().levels,
-			nextStoryauto = getgenv().nextStoryauto,
-			Buyer1 = getgenv().Buyer1,
-			Buyer2 = getgenv().Buyer2,
-			Buyer3 = getgenv().Buyer3,
-			resultGems = getgenv().resultGems,
-			--//Dun //------
-			dunj1 = getgenv().dunj1,
-			dunj2 = getgenv().dunj2,
-			dunj3 = getgenv().dunj3,
-			--//---------------
-			dunjnew = getgenv().dunjnew,
-			BattlePass = getgenv().BattlePass,
-			warpfriend = getgenv().warpfriend,
-			ShopGold = getgenv().ShopGold,
-			ijobID = getgenv().jobID,
-			dctage = getgenv().dctage,
-			friendOnly = getgenv().friendOnly,
-			timelock = getgenv().timelock,
-			questtoday = getgenv().questtoday,
-			antiafk = getgenv().antiafk,
+
+			-- Auto Hide UI
 			autoHideUI = getgenv().autoHideUI,
-			renderring = getgenv().renderring,
-			fpsboots = getgenv().fpsboots,
-			nextLevelINF = getgenv().nextLevelINF,
-			openlockfps = getgenv().openlockfps,
-			waveteleport = getgenv().waveteleport,
-			getgems = getgenv().getgems,
-			autosell = getgenv().autosell,
-			autogems = getgenv().autogems,
+			-- Save Script
+			AutoLoadTP = getgenv().AutoLoadTP,
+			-- Warp Friends
+			warpfriend = getgenv().warpfriend,
+			-- Auto Start
+			autostart = getgenv().autostart,
+			AutoReplay = getgenv().AutoReplay,
+			--Select Mode
+			autoSelectMode	= getgenv().autoSelectMode,
+			textGem = getgenv().textGem,
+			resultGems = getgenv().resultGems,
+			--Battlepass
+			BattlePass = getgenv().BattlePass,
+			-- Select Item Raid
+			autoSelectItem = getgenv().autoSelectItem,
+			-- Map
+			world = getgenv().world,
+			levels = getgenv().levels,
+			level = getgenv().level,
+			difficulty = getgenv().difficulty,
+
+			-- Webhook
+			dctage = getgenv().dctage,
 			webhook = getgenv().weburl,
 			weburlfinish = getgenv().weburlfinish,
-			webportal = getgenv().webportal,
-			autofarm = getgenv().AutoFarm,
-			autoportal = getgenv().autoportal,
-			autofarmic = getgenv().AutoFarmIC,
-			autofarmtp = getgenv().AutoFarmTP,
-			autoloadtp = getgenv().AutoLoadTP,
-			autostart = getgenv().autostart,
-			autostartStory = getgenv().autostartStory,
-			autoupgrade = getgenv().autoupgrade,
-			difficulty = getgenv().difficulty,
-			world = getgenv().world,
-			level = getgenv().level,
+			-- Select Unit
 			xselectedUnits = getgenv().SelectedUnits,
-			autoabilities = getgenv().autoabilities,
+			-- Lock FPS
+			lockfps = getgenv().lockfps,
+			renderring = getgenv().renderring,
+			-- Other
+			questtoday = getgenv().questtoday,
+			-- Job ID
+			jobID = getgenv().jobID,
+
 		}
 		local json = HttpService:JSONEncode(xdata)
 		writefile(savefilename, json)
 	end
+
 --#endregion
 
 --###### UI ######--
 
 --#region setting Map
-  if game.PlaceId == 8304191830 then
-		--เช็คแบทเทิลพาส
-		pcall(function()
-			--check_battlepass = game:GetService("Players").LocalPlayer.PlayerGui.BattlePass.Main.Level:FindFirstChild("V")
-			repeat task.wait() until game:GetService("Players").LocalPlayer.PlayerGui.BattlePass.Main.FurthestRoom.V.Text ~= "99" 
-			levelBattlepass = game:GetService("Players").LocalPlayer.PlayerGui.BattlePass.Main.FurthestRoom.V.Text
-			getgenv().BattlePass = game:GetService("Players").LocalPlayer.PlayerGui.BattlePass.Main.Level.V.Text .. "[" .. levelBattlepass .."]"
-			updatejson()
-		end)
-		
-		local Tab = Window:MakeTab({Name = "🌎 เลือกด่าน",Icon = "rbxassetid://6022668966",PremiumOnly = false,}) -- MAP
-		local Section = Tab:AddSection({ Name = "เลือกด่าน" })
-		--เลือกด่าน
-		Tab:AddDropdown({
-				Name = "🌎 เลือกแมพ",
-				Default = getgenv().world,
-				Options = {
-						"Plannet Namak",
-						"Shiganshinu District",
-						"Snowy Town",
-						"Hidden Sand Village",
-						"Marine's Ford",
-						"Ghoul City",
-						"Hollow World",
-						"Ant Kingdom",
-						"Magic Town",
-						"Cursed Academy",
-						"Clover Kingdom",
-						"Cape Canaveral",
-						"Alien Spaceship",
-						"Fabled Kingdom",
-						"Hero City",
-						"Clover Legend - HARD",
-						"Hollow Legend - HARD",
-						"Cape Legend - HARD",
-						"Fabled Legend - HARD",
-						"Hero Legend - HARD",
-				},
-				Callback = function(Value)
-						getgenv().world = Value
-						if Value == "Plannet Namak" then
-								getgenv().levels = {
-										"namek_infinite",
-										"namek_level_1",
-										"namek_level_2",
-										"namek_level_3",
-										"namek_level_4",
-										"namek_level_5",
-										"namek_level_6"
-								}
-						elseif Value == "Shiganshinu District" then
-								getgenv().levels = {
-										"aot_infinite",
-										"aot_level_1",
-										"aot_level_2",
-										"aot_level_3",
-										"aot_level_4",
-										"aot_level_5",
-										"aot_level_6"
-								}
-						elseif Value == "Snowy Town" then
-								getgenv().levels = {
-										"demonslayer_infinite",
-										"demonslayer_level_1",
-										"demonslayer_level_2",
-										"demonslayer_level_3",
-										"demonslayer_level_4",
-										"demonslayer_level_5",
-										"demonslayer_level_6"
-								}
-						elseif Value == "Hidden Sand Village" then
-								getgenv().levels = {
-										"naruto_infinite",
-										"naruto_level_1",
-										"naruto_level_2",
-										"naruto_level_3",
-										"naruto_level_4",
-										"naruto_level_5",
-										"naruto_level_6"
-								}
-						elseif Value == "Marine's Ford" then
-								getgenv().levels = {
-										"marineford_infinite",
-										"marineford_level_1",
-										"marineford_level_2",
-										"marineford_level_3",
-										"marineford_level_4",
-										"marineford_level_5",
-										"marineford_level_6"
-								}
-						elseif Value == "Ghoul City" then
-								getgenv().levels = {
-										"tokyoghoul_infinite",
-										"tokyoghoul_level_1",
-										"tokyoghoul_level_2",
-										"tokyoghoul_level_3",
-										"tokyoghoul_level_4",
-										"tokyoghoul_level_5",
-										"tokyoghoul_level_6"
-								}
-						elseif Value == "Hollow World" then
-								getgenv().levels = {
-										"hueco_infinite",
-										"hueco_level_1",
-										"hueco_level_2",
-										"hueco_level_3",
-										"hueco_level_4",
-										"hueco_level_5",
-										"hueco_level_6"
-								}
-						elseif Value == "Ant Kingdom" then
-								getgenv().levels = {
-										"hxhant_infinite",
-										"hxhant_level_1",
-										"hxhant_level_2",
-										"hxhant_level_3",
-										"hxhant_level_4",
-										"hxhant_level_5",
-										"hxhant_level_6"
-								}
-						elseif Value == "Magic Town" then
-								getgenv().levels = {
-										"magnolia_infinite",
-										"magnolia_level_1",
-										"magnolia_level_2",
-										"magnolia_level_3",
-										"magnolia_level_4",
-										"magnolia_level_5",
-										"magnolia_level_6"
-								}
-						elseif Value == "Cursed Academy" then
-								getgenv().levels = {
-										"jjk_infinite",
-										"jjk_level_1",
-										"jjk_level_2",
-										"jjk_level_3",
-										"jjk_level_4",
-										"jjk_level_5",
-										"jjk_level_6"
-								}
-						elseif Value == "Clover Kingdom" then
-								getgenv().levels = {
-										"clover_infinite",
-										"clover_level_1",
-										"clover_level_2",
-										"clover_level_3",
-										"clover_level_4",
-										"clover_level_5",
-										"clover_level_6"
-								}
-						elseif Value == "Clover Legend - HARD" then
-								getgenv().levels = {
-										"clover_legend_1",
-										"clover_legend_2",
-										"clover_legend_3"
-								}
-						elseif Value == "Cape Legend - HARD" then
-								getgenv().levels = {
-										"jojo_legend_1",
-										"jojo_legend_2",
-										"jojo_legend_3"
-								}
-						elseif Value == "Fabled Legend - HARD" then
-								getgenv().levels = {
-										"7ds_legend_1",
-										"7ds_legend_2",
-										"7ds_legend_3"
-								}
-						elseif Value == "Hollow Legend - HARD" then
-								getgenv().levels = {
-										"bleach_legend_1",
-										"bleach_legend_2",
-										"bleach_legend_3",
-										"bleach_legend_4",
-										"bleach_legend_5",
-										"bleach_legend_6"
-								}
-						elseif Value == "Cape Canaveral" then
-								getgenv().levels = {
-										"jojo_infinite",
-										"jojo_level_1",
-										"jojo_level_2",
-										"jojo_level_3",
-										"jojo_level_4",
-										"jojo_level_5",
-										"jojo_level_6"
-								}
-						elseif Value == "Alien Spaceship" then
-								getgenv().levels = {
-										"opm_infinite",
-										"opm_level_1",
-										"opm_level_2",
-										"opm_level_3",
-										"opm_level_4",
-										"opm_level_5",
-										"opm_level_6"
-								}
-						elseif Value == "Fabled Kingdom" then
-								getgenv().levels = {
-										"7ds_infinite",
-										"7ds_level_1",
-										"7ds_level_2",
-										"7ds_level_3",
-										"7ds_level_4",
-										"7ds_level_5",
-										"7ds_level_6"
-								}
-						elseif Value == "Hero City" then
-								getgenv().levels = {
-										"mha_infinite",
-										"mha_level_1",
-										"mha_level_2",
-										"mha_level_3",
-										"mha_level_4",
-										"mha_level_5",
-										"mha_level_6"
-								}
-						elseif Value == "Hero Legend - HARD" then
-								getgenv().levels = {
-										"mha_legend_1",
-										"mha_legend_2",
-										"mha_legend_3",
-										"mha_legend_4",
-										"mha_legend_5",
-										"mha_legend_6"
-								}
-						end
-						updatejson()
-						pcall(function()
-								getgenv().select_level_dropdown:Refresh(getgenv().levels, true)
-						end)
-				end
-		})
 
-		--เลือกเลเวล
-		getgenv().select_level_dropdown = Tab:AddDropdown({
-				Name = "🎚️ เลือกเลเวล",
-				Default = getgenv().level,
-				Options = getgenv().levels,
-				Callback = function(Value)
-						getgenv().level = Value
-						updatejson()
-				end
-		})
-		--เลือกความยาก
-		Tab:AddDropdown({
-				Name = "🔥 เลือกความยาก",
-				Default = getgenv().difficulty,
-				Options = {"Normal", "Hard"},
-				Callback = function(Value)
-						getgenv().difficulty = Value
-						updatejson()
-				end
-		})
-
-		local Section = Tab:AddSection({ Name = "ตั้งค่าวาร์ป" })
-		--ปรับเฉพาะเพื่อน
-		Tab:AddToggle({
-				Name = "🔧 เปิดวาร์ปเฉพาะเพื่อน",
-				Default = getgenv().friendOnly,
-				Callback = function(bool)
-						getgenv().friendOnly = bool
-						updatejson()
-				end,
-		})
-		local Section = Tab:AddSection({ Name = "ออโตสตอรี่" })
-		-- Next Story
-		Tab:AddToggle({
-			Name = "🔧 Server Hop",
-			Default = getgenv().nextStoryauto,
-			Callback = function(bool)
-					getgenv().nextStoryauto = bool
-					updatejson()
-			end,
-		})
-		--ออโต้สตอรี่
-		Tab:AddToggle({
-				Name = "🔧 ออโต้สตอรี่",
-				Default = getgenv().autostartStory,
-				Callback = function(bool)
-						getgenv().autostartStory = bool
-						updatejson()
-				end,
-		})
-		--ลบแมพ
-		Tab:AddToggle({
-			Name = "🔧 ลบแมพ",
-			Default = getgenv().removeMap,
-			Callback = function(bool)
-					getgenv().removeMap = bool
-					updatejson()
-			end,
-		})
-	else
-		--// SETTING IN WORD//--
-		local Tab = Window:MakeTab({Name = "🌎 ออโต้สตอรี่",Icon = "rbxassetid://6022668966",PremiumOnly = false,}) -- MAP
-    local Section = Tab:AddSection({ Name = "เลื่อนสตอรี่อัตโนมัติ" })
-		-- Next Story
-		Tab:AddToggle({
-			Name = "🔧 Server Hop",
-			Default = getgenv().nextStoryauto,
-			Callback = function(bool)
-					getgenv().nextStoryauto = bool
-					updatejson()
-			end,
-		})
-		--ออโต้สตอรี่
-		Tab:AddToggle({
-				Name = "🔧 ออโต้สตอรี่",
-				Default = getgenv().autostartStory,
-				Callback = function(bool)
-						getgenv().autostartStory = bool
-						updatejson()
-				end,
-    })
-		-- ลบแมพ
-		Tab:AddToggle({
-			Name = "🔧 ลบแมพ",
-			Default = getgenv().removeMap,
-			Callback = function(bool)
-					getgenv().removeMap = bool
-					updatejson()
-					if game.PlaceId ~= 8304191830 then
-						if getgenv().removeMap then
-							local removeMap = game:GetService("Workspace")["_map"]:GetChildren()
-							local removeTerrain = game:GetService("Workspace")["_terrain"].terrain:GetChildren()
-							
-							for i , v in pairs(removeMap) do
-								if v.Name ~= "Union" 
-								and v.Name ~= "houses_new"
-								and v.Name ~= "namek mushroom model"
-								and v.Name ~= "Snow Particles"
-								and v.Name ~= "sand_gate"
-								and v.Name ~= "icebergs"
-								and v.Name ~= "Helicopter Pad"
-								and v.Name ~= "castle top"
-								and v.Name ~= "Village Path"
-								and v.Name ~= "wooden stacks"
-								and v.Name ~= "skeleton"
-								and v.Name ~= "SpaceCenter"
-								and v.Name ~= "boat and bus"
-								and v.Name ~= "LanternsGround"
-								and v.Name ~= "ThreeDTextObject"
-								and v.Name ~= "misc nonocollide obstacles"
-								and v.Name ~= "parking spots"
-								and v.Name ~= "vegetation"
-								and v.Name ~= "crashed spaceships"
-								and v.Name ~= "bridge nocollide"
-								and v.Name ~= "Support_Beam"
-								then
-									v:Destroy()
-								end
-							end
-
-							for i , v in pairs(removeTerrain) do
-									v:Destroy()
-							end
-						end
-					end
-			end,
-		})
-		--// Disble Error in game
-		game.Players.LocalPlayer.PlayerGui.MessageGui.Enabled = false
-		game:GetService("ReplicatedStorage").packages.assets["ui_sfx"].error.Volume = 0
-		game:GetService("ReplicatedStorage").packages.assets["ui_sfx"].error_old.Volume = 0
-		--// AUTO SETTING LOW POLYGON
-		local args = {
-				[1] = "low_quality",
-				[2] = true
-		}
-		game:GetService("ReplicatedStorage").endpoints.client_to_server.toggle_setting:InvokeServer(unpack(args))
-		local args = {
-				[1] = "disable_kill_fx",
-				[2] = true
-		}
-		game:GetService("ReplicatedStorage").endpoints.client_to_server.toggle_setting:InvokeServer(unpack(args))
-		local args = {
-				[1] = "disable_other_fx",
-				[2] = true
-		}
-		game:GetService("ReplicatedStorage").endpoints.client_to_server.toggle_setting:InvokeServer(unpack(args))
-		local args = {
-				[1] = "disable_effects",
-				[2] = true
-		}
-		game:GetService("ReplicatedStorage").endpoints.client_to_server.toggle_setting:InvokeServer(unpack(args))
-		local args = {
-				[1] = "low_quality_shadows",
-				[2] = true
-		}
-		game:GetService("ReplicatedStorage").endpoints.client_to_server.toggle_setting:InvokeServer(unpack(args))
-		local args = {
-				[1] = "low_quality_textures",
-				[2] = true
-		}
-		game:GetService("ReplicatedStorage").endpoints.client_to_server.toggle_setting:InvokeServer(unpack(args))
-		local args = {
-				[1] = "autoskip_waves",
-				[2] = true
-		}
-		game:GetService("ReplicatedStorage").endpoints.client_to_server.toggle_setting:InvokeServer(unpack(args))
-		local args = {
-				[1] = "disable_auto_open_overhead",
-				[2] = true
-		}
-		game:GetService("ReplicatedStorage").endpoints.client_to_server.toggle_setting:InvokeServer(unpack(args))
-	--///////////////////////////////////////////////////////////////////////////////////////////////////--
-  end
---#endregion
+	--เช็คแบทเทิลพาส
+	pcall(function()
+		repeat task.wait() until game:GetService("Players").LocalPlayer.PlayerGui.BattlePass.Main.FurthestRoom.V.Text ~= "99" 
+		levelBattlepass = game:GetService("Players").LocalPlayer.PlayerGui.BattlePass.Main.FurthestRoom.V.Text
+		--getgenv().BattlePass = game:GetService("Players").LocalPlayer.PlayerGui.BattlePass.Main.Level.V.Text .. "[" .. levelBattlepass .."]"
+		getgenv().BattlePass = game:GetService("Players").LocalPlayer.PlayerGui.BattlePass.Main.Level.V.Text
+		updatejson()
+	end)
 	
---#region setting farm
-		local Tab = Window:MakeTab({Name = "🛠️ ตั้งค่าการฟาร์ม",Icon = "rbxassetid://6022668966",PremiumOnly = false,}) -- FARM
-		local Section = Tab:AddSection({ Name = "ตั้งค่าเกม" })
-		--เริ่มเกมอัตโนมัติ
-		Tab:AddToggle({
-				Name = "🛠️ เริ่มเกมอัตโนมัติ",
-				Default = getgenv().autostart,
-				Callback = function(bool)
-						getgenv().autostart = bool
-						updatejson()
-				end,
-		})
-		--เล่นซ้ำเมื่อจบด่าน
-		Tab:AddToggle({
-				Name = "🛠️ เล่นซ้ำเมื่อจบด่าน",
-				Default = getgenv().AutoReplay,
-				Callback = function(bool)
-						getgenv().AutoReplay = bool
-						updatejson()
-				end,
-		})
-		--ออกแมพเมื่อจบด่าน
-		Tab:AddToggle({
-				Name = "🛠️ ออกแมพเมื่อจบด่าน",
-				Default = getgenv().AutoLeave,
-				Callback = function(bool)
-						getgenv().AutoLeave = bool
-						updatejson()
-				end,
-		})
-		--ออกแมพเมื่อถึงกำหนด Wave
-		Tab:AddToggle({
-				Name = "🛠️ ออกแมพเมื่อถึงกำหนด Wave",
-				Default = getgenv().waveteleport,
-				Callback = function(x)
-						getgenv().waveteleport = x
-						updatejson()
-				end,
-		})
-		local Section = Tab:AddSection({ Name = "ตั้งค่าตัวละคร" })
-		--วางตัวอัตโนมัติ
-		Tab:AddToggle({
-				Name = "🧑‍🔧 วางตัวอัตโนมัติ",
-				Default = getgenv().AutoFarm,
-				Callback = function(bool)
-						getgenv().AutoFarm = bool
-						updatejson()
-				end,
-		})
-		--อัพเกรดตัวอัตโนมัติ
-		Tab:AddToggle({
-				Name = "🧑‍🔬 อัพเกรดตัวอัตโนมัติ",
-				Default = getgenv().autoupgrade,
-				Callback = function(bool)
-						getgenv().autoupgrade = bool
-						updatejson()
-				end,
-		})
-		--ใช้สกิลอัตโนมัติ
-		Tab:AddToggle({
-				Name = "🧑‍🚒 ใช้สกิลอัตโนมัติ",
-				Default = getgenv().autoabilities,
-				Callback = function(bool)
-						getgenv().autoabilities = bool
-						updatejson()
-				end,
-		})
-		--ขายยูนิตเมื่องถึง Wave ที่กำหนด
-		Tab:AddToggle({
-				Name = "👮 ขายยูนิตเมื่องถึง Wave ที่กำหนด",
-				Default = getgenv().autosell,
-				Callback = function(x)
-						getgenv().autosell = x
-						updatejson()
-				end,
-		})
-		local Section = Tab:AddSection({ Name = "กำหนด Wave" })
-		--ใส่จำนวน wave
-		Tab:AddTextbox({
-				Name = "⚙️ ใส่จำนวน Wave",
-				Default = getgenv().sellatwave,
-				TextDisappear = false,
-				Callback = function(t)
-						getgenv().sellatwave = tonumber(t)
-						updatejson()
-				end,
-		})
-		local Section = Tab:AddSection({ Name = "ตั้งค่าเพชร" })
-		--ใส่จำนวนเพชร
-		Tab:AddTextbox({
-				Name = "💎 ใส่จำนวนเพชร",
-				Default = tonumber(getgenv().getgems),
-				TextDisappear = false,
-				Callback = function(t)
-						getgenv().getgems = tonumber(t)
-						updatejson()
-				end,
-		})
-		local Section = Tab:AddSection({ Name = "รับโค้ดเกม" })
-		--รับโค้ดเกม
-		Tab:AddButton({
-				Name = "รับโค้ดทั้งหมด",
-				Callback = function()
-			if game.PlaceId == 8304191830 then
-				local redeem_code = {
-					"VIGILANTE",
-					"GOLDEN",
-					"SINS2",
-					"SINS",
-					"HERO",
-					"UCHIHA",
-					"CLOUD",
-					"CHAINSAW",
-					"NEWYEAR2023",
-					"kingluffy",
-					"toadboigaming",
-					"noclypso",
-					"fictionthefirst",
-					"subtomaokuma",
-					"subtokelvingts",
-					"subtoblamspot",
-				}
-				for i, v in ipairs(redeem_code) do
-					local args = {
-						[1] = tostring(v),
-					}
-					game:GetService("ReplicatedStorage").endpoints.client_to_server.redeem_code:InvokeServer(unpack(args))
-				end
+	local Tab = Window:MakeTab({Name = "🌎 เลือกระบบที่ต้องการ",Icon = "rbxassetid://6022668966",PremiumOnly = false,}) -- MAP
+
+	Tab:AddToggle({
+		Name = "🛠️ เริ่มเกมอัตโนมัติ",
+		Default = getgenv().autostart,
+		Callback = function(bool)
+				getgenv().autostart = bool
+				updatejson()
+		end,
+	})
+
+	--เล่นซ้ำเมื่อจบด่าน // getgenv().autoSelectItem
+	Tab:AddToggle({
+		Name = "🛠️ เล่นซ้ำเมื่อจบด่าน",
+		Default = getgenv().AutoReplay,
+		Callback = function(bool)
+				getgenv().AutoReplay = bool
+				updatejson()
+		end,
+	})
+
+	--เลือกโหมด
+	local myMode = {"เลือกโหมดที่ต้องการฟาร์ม","ฟาร์มสตอรี่","ฟาร์มเพชร","ฟาร์มเพชรเลือกด่าน","ฟาร์ม BattlePass","ฟาร์มเวลตัวละคร","ฟาร์มหอคอย","ฟาร์มไก่เพชร","ฟาร์มไอเท็มเรด"}
+	local Section = Tab:AddSection({ Name = "เลือกโหมด" })
+	Tab:AddDropdown({
+		Name = "🎚️ เลือกโหมด",
+		Default = getgenv().autoSelectMode or "เลือกโหมดที่ต้องการฟาร์ม" ,
+		Options = myMode ,
+		Callback = function(Value)
+				getgenv().autoSelectMode = Value
+				updatejson()
+		end
+	})
+
+	--เลือกไอเท็ม
+	local myRaid = {"เลือกไอเท็มเรท","Alien Scouter","Tomoe","Entertain Shard","Demon Shard","Relic Shard"}
+	Tab:AddDropdown({
+		Name = "🎚️ เลือกไอเท็ม",
+		Default = getgenv().autoSelectItem or "เลือกไอเท็มเรท" ,
+		Options = myRaid ,
+		Callback = function(Value)
+			getgenv().autoSelectItem = Value
+			updatejson()
+		end
+	})
+
+	--ใส่จำนวนเพชร
+	Tab:AddTextbox({
+		Name = "💎 ใส่จำนวน",
+		Default = tonumber(getgenv().textGem),
+		TextDisappear = false,
+		Callback = function(t)
+				getgenv().textGem = tonumber(t)
+				updatejson()
+		end,
+	})
+
+	local Section = Tab:AddSection({ Name = "เลือกด่าน" })
+	--เลือกด่าน
+	Tab:AddDropdown({
+			Name = "🌎 เลือกแมพ",
+			Default = getgenv().world,
+			Options = {
+					"Plannet Namak",
+					"Shiganshinu District",
+					"Snowy Town",
+					"Hidden Sand Village",
+					"Marine's Ford",
+					"Ghoul City",
+					"Hollow World",
+					"Ant Kingdom",
+					"Magic Town",
+					"Cursed Academy",
+					"Clover Kingdom",
+					"Cape Canaveral",
+					"Alien Spaceship",
+					"Fabled Kingdom",
+					"Hero City",
+					"Clover Legend - HARD",
+					"Hollow Legend - HARD",
+					"Cape Legend - HARD",
+					"Fabled Legend - HARD",
+					"Hero Legend - HARD",
+			},
+			Callback = function(Value)
+					getgenv().world = Value
+					if Value == "Plannet Namak" then
+							getgenv().levels = {
+									"namek_infinite",
+									"namek_level_1",
+									"namek_level_2",
+									"namek_level_3",
+									"namek_level_4",
+									"namek_level_5",
+									"namek_level_6"
+							}
+					elseif Value == "Shiganshinu District" then
+							getgenv().levels = {
+									"aot_infinite",
+									"aot_level_1",
+									"aot_level_2",
+									"aot_level_3",
+									"aot_level_4",
+									"aot_level_5",
+									"aot_level_6"
+							}
+					elseif Value == "Snowy Town" then
+							getgenv().levels = {
+									"demonslayer_infinite",
+									"demonslayer_level_1",
+									"demonslayer_level_2",
+									"demonslayer_level_3",
+									"demonslayer_level_4",
+									"demonslayer_level_5",
+									"demonslayer_level_6"
+							}
+					elseif Value == "Hidden Sand Village" then
+							getgenv().levels = {
+									"naruto_infinite",
+									"naruto_level_1",
+									"naruto_level_2",
+									"naruto_level_3",
+									"naruto_level_4",
+									"naruto_level_5",
+									"naruto_level_6"
+							}
+					elseif Value == "Marine's Ford" then
+							getgenv().levels = {
+									"marineford_infinite",
+									"marineford_level_1",
+									"marineford_level_2",
+									"marineford_level_3",
+									"marineford_level_4",
+									"marineford_level_5",
+									"marineford_level_6"
+							}
+					elseif Value == "Ghoul City" then
+							getgenv().levels = {
+									"tokyoghoul_infinite",
+									"tokyoghoul_level_1",
+									"tokyoghoul_level_2",
+									"tokyoghoul_level_3",
+									"tokyoghoul_level_4",
+									"tokyoghoul_level_5",
+									"tokyoghoul_level_6"
+							}
+					elseif Value == "Hollow World" then
+							getgenv().levels = {
+									"hueco_infinite",
+									"hueco_level_1",
+									"hueco_level_2",
+									"hueco_level_3",
+									"hueco_level_4",
+									"hueco_level_5",
+									"hueco_level_6"
+							}
+					elseif Value == "Ant Kingdom" then
+							getgenv().levels = {
+									"hxhant_infinite",
+									"hxhant_level_1",
+									"hxhant_level_2",
+									"hxhant_level_3",
+									"hxhant_level_4",
+									"hxhant_level_5",
+									"hxhant_level_6"
+							}
+					elseif Value == "Magic Town" then
+							getgenv().levels = {
+									"magnolia_infinite",
+									"magnolia_level_1",
+									"magnolia_level_2",
+									"magnolia_level_3",
+									"magnolia_level_4",
+									"magnolia_level_5",
+									"magnolia_level_6"
+							}
+					elseif Value == "Cursed Academy" then
+							getgenv().levels = {
+									"jjk_infinite",
+									"jjk_level_1",
+									"jjk_level_2",
+									"jjk_level_3",
+									"jjk_level_4",
+									"jjk_level_5",
+									"jjk_level_6"
+							}
+					elseif Value == "Clover Kingdom" then
+							getgenv().levels = {
+									"clover_infinite",
+									"clover_level_1",
+									"clover_level_2",
+									"clover_level_3",
+									"clover_level_4",
+									"clover_level_5",
+									"clover_level_6"
+							}
+					elseif Value == "Clover Legend - HARD" then
+							getgenv().levels = {
+									"clover_legend_1",
+									"clover_legend_2",
+									"clover_legend_3"
+							}
+					elseif Value == "Cape Legend - HARD" then
+							getgenv().levels = {
+									"jojo_legend_1",
+									"jojo_legend_2",
+									"jojo_legend_3"
+							}
+					elseif Value == "Fabled Legend - HARD" then
+							getgenv().levels = {
+									"7ds_legend_1",
+									"7ds_legend_2",
+									"7ds_legend_3"
+							}
+					elseif Value == "Hollow Legend - HARD" then
+							getgenv().levels = {
+									"bleach_legend_1",
+									"bleach_legend_2",
+									"bleach_legend_3",
+									"bleach_legend_4",
+									"bleach_legend_5",
+									"bleach_legend_6"
+							}
+					elseif Value == "Cape Canaveral" then
+							getgenv().levels = {
+									"jojo_infinite",
+									"jojo_level_1",
+									"jojo_level_2",
+									"jojo_level_3",
+									"jojo_level_4",
+									"jojo_level_5",
+									"jojo_level_6"
+							}
+					elseif Value == "Alien Spaceship" then
+							getgenv().levels = {
+									"opm_infinite",
+									"opm_level_1",
+									"opm_level_2",
+									"opm_level_3",
+									"opm_level_4",
+									"opm_level_5",
+									"opm_level_6"
+							}
+					elseif Value == "Fabled Kingdom" then
+							getgenv().levels = {
+									"7ds_infinite",
+									"7ds_level_1",
+									"7ds_level_2",
+									"7ds_level_3",
+									"7ds_level_4",
+									"7ds_level_5",
+									"7ds_level_6"
+							}
+					elseif Value == "Hero City" then
+							getgenv().levels = {
+									"mha_infinite",
+									"mha_level_1",
+									"mha_level_2",
+									"mha_level_3",
+									"mha_level_4",
+									"mha_level_5",
+									"mha_level_6"
+							}
+					elseif Value == "Hero Legend - HARD" then
+							getgenv().levels = {
+									"mha_legend_1",
+									"mha_legend_2",
+									"mha_legend_3",
+									"mha_legend_4",
+									"mha_legend_5",
+									"mha_legend_6"
+							}
+					end
+					updatejson()
+					pcall(function()
+							getgenv().select_level_dropdown:Refresh(getgenv().levels, true)
+					end)
 			end
-				end,
-		})
+	})
+
+	--เลือกเลเวล
+	getgenv().select_level_dropdown = Tab:AddDropdown({
+			Name = "🎚️ เลือกเลเวล",
+			Default = getgenv().level,
+			Options = getgenv().levels,
+			Callback = function(Value)
+					getgenv().level = Value
+					updatejson()
+			end
+	})
+
+	local Section = Tab:AddSection({ Name = "รับโค้ดเกม" })
+	--รับโค้ดเกม
+	Tab:AddButton({
+			Name = "รับโค้ดทั้งหมด",
+			Callback = function()
+		if game.PlaceId == 8304191830 then
+			local redeem_code = {
+				"ENTERTAINMENT",
+				"HAPPYEASTER",
+				"VIGILANTE",
+				"GOLDEN",
+				"SINS2",
+				"SINS",
+				"HERO",
+				"UCHIHA",
+				"CLOUD",
+				"CHAINSAW",
+				"NEWYEAR2023",
+				"kingluffy",
+				"toadboigaming",
+				"noclypso",
+				"fictionthefirst",
+				"subtomaokuma",
+				"subtokelvingts",
+				"subtoblamspot",
+			}
+			for i, v in ipairs(redeem_code) do
+				local args = {
+					[1] = tostring(v),
+				}
+				game:GetService("ReplicatedStorage").endpoints.client_to_server.redeem_code:InvokeServer(unpack(args))
+			end
+		end
+			end,
+	})
+
+	--///////////////////////////////////////////////////////////////////////////////////////////////////--
+  
 --#endregion
 
---#region setting DUNJENT
-		local Tab = Window:MakeTab({Name = "🏝️ ดันเจี้ยน",Icon = "rbxassetid://6022668966",PremiumOnly = false,}) -- DUNJENT
-		local Section = Tab:AddSection({ Name = "หอคอย" })
-		Tab:AddToggle({
-				Name = "🏯 ลงหอคอย",
-				Default = getgenv().AutoFarmIC,
-				Callback = function(bool)
-						getgenv().AutoFarmIC = bool
-			updatejson()
-				end,
-		})
-		local Section = Tab:AddSection({ Name = "ชาเลนจ์" })
-		Tab:AddToggle({
-				Name = "🍉 ฟามผลไม้",
-				Default = getgenv().AutoChallenge,
-				Callback = function(bool)
-						getgenv().AutoChallenge = bool
-						updatejson()
-				end,
-		})
-		local Section = Tab:AddSection({ Name = "ดันเจี้ยนพิเศษ" })
-		Tab:AddToggle({
-				Name = "⭐ ลงดันดาว",
-				Default = getgenv().dunjnew,
-				Callback = function(bool)
-						getgenv().dunjnew = bool
-						updatejson()
-				end,
-		})
-		Tab:AddToggle({
-				Name = "🤟 ดันนิ้ว",
-				Default = getgenv().dunj1,
-				Callback = function(bool)
-						getgenv().dunj1 = bool
-						updatejson()
-				end,
-		})
-		local Section = Tab:AddSection({ Name = "ชาเลนจ์ประจำวัน" })
-		Tab:AddButton({
-				Name = "🍌 เข้าชาเลนจ์ประจำวัน",
-				Callback = function()
-						task.wait(2)
-						if game.PlaceId == 8304191830 then
-							for i, v in pairs(game:GetService("Workspace")["_CHALLENGES"].DailyChallenge:GetDescendants()) do
-								if v.Name == "Owner" and v.Value == nil then
-									local args = { 
-										[1] = tostring(v.Parent.Name)
-									}
-									game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer(unpack(args))
-									getgenv().chdoor = v.Parent.Name
-									break
-								end
-							end
-						end
-				end,
-		})
---#endregion
 
 --#region setting SettingScript
 		local Tab = Window:MakeTab({ Name = "⚙️ การตั้งค่าสคริป", Icon = "rbxassetid://6022668966", PremiumOnly = false, }) -- SETTING SCRIPT
-		local Section = Tab:AddSection({ Name = "ฟังชั่นมอนไม่เดิน" })
-		--มอนไม่เดิน
-		Tab:AddToggle({
-				Name = "🚨 มอนเตอร์ไม่เดิน",
-				Default = getgenv().timelock,
-				Callback = function(bool)
-						getgenv().timelock = bool
-						updatejson()
-				end,
-		})
-		--ระดับความแลค
-		Tab:AddSlider({
-			Name = "ระดับความแลค(ยิ่งน้อยยิ่งแลค)",
-			Min = 0,
-			Max = 3,
-			Default = getgenv().takeTime,
-			Color = Color3.fromRGB(247,4,203),
-			Increment = 0.2,
-			ValueName = " -> ปรับระดับ",
-			Callback = function(Value)
-					getgenv().takeTime = Value
-					updatejson()
-			end    
-		})
 		local Section = Tab:AddSection({ Name = "ซ่อน UI เมื่อเริ่มเกมส์" })
 		--ซ่อน UI
 		Tab:AddToggle({
@@ -3302,7 +2873,9 @@ function PjxInit()
 					updatejson()
 			end,
 		})
+
 		local Section = Tab:AddSection({ Name = "ตั้งค่า" })
+
 		--บันทึก/โหลด สคริปต์อัตโนมัติเมื่อเปิดใช้งาน
 		Tab:AddToggle({
 				Name = "⚙️ บันทึก/โหลด สคริปต์อัตโนมัติเมื่อเปิดใช้งาน",
@@ -3317,7 +2890,7 @@ function PjxInit()
 				Name = "⚙️ รับเควสอัตโนมัติ",
 				Default = getgenv().questtoday,
 				Callback = function(x)
-						getgenv().questtoday = x
+						getgenv().questtoday = true
 						updatejson()
 						if game.PlaceId == 8304191830 then
 							if getgenv().questtoday then
@@ -3371,70 +2944,76 @@ function PjxInit()
 						end
 				end,
 		})
-		--คลิกเพื่อวาป (กด Ctrl + คลิก
+
+		--ลบแมพ
 		Tab:AddToggle({
-			Name = "⚙️ คลิกเพื่อวาป (กด Ctrl + คลิก)",
-			Default = getgenv().clickTeleport,
+			Name = "⚙️ ลบแมพ",
+			Default = true,
 			Callback = function(x)
-					getgenv().clickTeleport = x
-					updatejson()
-					if getgenv().clickTeleport then
-							local player = game:GetService("Players").LocalPlayer
-							local UserInputService = game:GetService("UserInputService")
-							local mouse = player:GetMouse()
-							repeat wait() until mouse
-							UserInputService.InputBegan:Connect(function(input, gameProcessed)
-								if input.UserInputType == Enum.UserInputType.MouseButton1 then
-									if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then
-										player.Character:MoveTo(Vector3.new(mouse.Hit.x, mouse.Hit.y, mouse.Hit.z)) 
-									end
-								end
-							end)
+				getgenv().deleteMap = x
+				if game.PlaceId ~= 8304191830 then
+					if deleteMap then
+						local removeMap = game:GetService("Workspace")["_map"]:GetChildren()
+						local removeTerrain = game:GetService("Workspace")["_terrain"].terrain:GetChildren()
+						for i , v in pairs(removeMap) do
+							if v.Name ~= "Union" 
+							and v.Name ~= "houses_new"
+							and v.Name ~= "namek mushroom model"
+							and v.Name ~= "Snow Particles"
+							and v.Name ~= "sand_gate"
+							and v.Name ~= "icebergs"
+							and v.Name ~= "Helicopter Pad"
+							and v.Name ~= "castle top"
+							and v.Name ~= "Village Path"
+							and v.Name ~= "wooden stacks"
+							and v.Name ~= "skeleton"
+							and v.Name ~= "SpaceCenter"
+							and v.Name ~= "boat and bus"
+							and v.Name ~= "LanternsGround"
+							and v.Name ~= "ThreeDTextObject"
+							and v.Name ~= "misc nonocollide obstacles"
+							and v.Name ~= "parking spots"
+							and v.Name ~= "vegetation"
+							and v.Name ~= "crashed spaceships"
+							and v.Name ~= "bridge nocollide"
+							and v.Name ~= "Support_Beam"
+							then
+								v:Destroy()
+							end
+						end
+						for i , v in pairs(removeTerrain) do
+								v:Destroy()
+						end
 					end
+				end
 			end,
 		})
+
 		--เปิดจอขาว(ลดCPU)
 		Tab:AddToggle({
 				Name = "⚙️ เปิดจอขาว(ลดCPU)",
 				Default = getgenv().renderring,
 				Callback = function(x)
-						getgenv().renderring = x
-						updatejson()
-						if getgenv().renderring then
-							game:GetService("RunService"):Set3dRenderingEnabled(false)
-						else
-							game:GetService("RunService"):Set3dRenderingEnabled(true)
-						end
+					getgenv().renderring = x
+					updatejson()
+					if getgenv().renderring then
+						game:GetService("RunService"):Set3dRenderingEnabled(false)
+					else
+						game:GetService("RunService"):Set3dRenderingEnabled(true)
+					end
 				end,
 		})
-		--กันAFK
-		Tab:AddToggle({
-				Name = "⚙️ กันAFK",
-				Default = getgenv().antiafk,
-				Callback = function(x)
-						getgenv().antiafk = x
-						updatejson()
-				end,
-		})
+
 		--ตั้งค่าล็อค FPS
 		Tab:AddToggle({
 				Name = "⚙️ ตั้งค่าล็อค FPS",
-				Default = getgenv().openlockfps,
+				Default = getgenv().lockfps,
 				Callback = function(x)
-						getgenv().openlockfps = x
+						getgenv().lockfps = x
 						updatejson()
 				end,
 		})
-		--ใส่ค่า FPS
-		Tab:AddTextbox({
-				Name = "⚙️ ใส่ค่า FPS",
-				Default = tostring(getgenv().lockfps),
-				TextDisappear = false,
-				Callback = function(t)
-						getgenv().lockfps = tonumber(t)
-						updatejson()
-				end,
-		})
+
 		local Section = Tab:AddSection({ Name = "ตั้งค่าเกม" })
 		--รีสตาทเกม
 		Tab:AddButton({
@@ -3483,7 +3062,7 @@ function PjxInit()
 			Name = "ปุ่มเปิด-ปิด จอขาว [F1 White Screen]",
 			Default = Enum.KeyCode.F1,
 			Hold = false,
-			Callback = function()
+			Callback = function(x)
 				game:GetService("RunService"):Set3dRenderingEnabled(getgenv().renderring)
 				getgenv().renderring = not getgenv().renderring
 				updatejson()
@@ -3595,138 +3174,6 @@ function PjxInit()
 							})
 							setclipboard(game.JobId)
 					end,
-		})
---#endregion
-
---#region settings Raid
-		local Tab = Window:MakeTab({ Name = "🚨 RAID", Icon = "rbxassetid://6022668966", PremiumOnly = false }) -- RAID
-		--uchiha
-		Tab:AddDropdown({
-				Name = "🌎 Entertainment",
-				Default = getgenv().raid_entertainment,
-				Options = {"เลือกด่านที่ต้องการฟาร์ม","entertainment_district_level_1","entertainment_district_level_2","entertainment_district_level_3","entertainment_district_level_4","entertainment_district_level_5",},
-				Callback = function(value)
-						getgenv().raid_entertainment = value
-						updatejson()
-				end,
-		})
-		--uchiha
-		Tab:AddDropdown({
-				Name = "🌎 Strom HideOut",
-				Default = getgenv().raid_strom,
-				Options = {"เลือกด่านที่ต้องการฟาร์ม","uchiha_level_1","uchiha_level_2","uchiha_level_3","uchiha_level_4","uchiha_level_5",},
-				Callback = function(value)
-						getgenv().raid_strom = value
-						updatejson()
-				end,
-		})
-		--freeze
-		Tab:AddDropdown({
-			Name = "🌎 west Cityt (Freeze) ",
-			Default = getgenv().raid_freeze,
-			Options = {"เลือกด่านที่ต้องการฟาร์ม","west_city_frieza_level_1","west_city_frieza_level_2","west_city_frieza_level_3","west_city_frieza_level_4","west_city_frieza_level_5",},
-			Callback = function(value)
-					getgenv().raid_freeze = value
-					updatejson()
-			end,
-		})
-		--West City
-		Tab:AddDropdown({
-				Name = "🌎 West City",
-				Default = getgenv().westCity,
-				Options = { "เลือกด่านที่ต้องการฟาร์ม", "west_city_raid" },
-				Callback = function(value)
-						getgenv().westCity = value
-						updatejson()
-				end,
-		})
-		--Infinity Train
-		Tab:AddDropdown({
-				Name = "🌎 Infinity Train",
-				Default = getgenv().demonSlayer,
-				Options = {"เลือกด่านที่ต้องการฟาร์ม", "demonslayer_raid_1"},
-				Callback = function(value)
-						getgenv().demonSlayer = value
-						updatejson()
-				end,
-		})
-		--Titan
-		Tab:AddDropdown({
-				Name = "🌎 Titan",
-				Default = getgenv().aotRaid,
-				Options = {"เลือกด่านที่ต้องการฟาร์ม", "aot_raid_1"},
-				Callback = function(value)
-						getgenv().aotRaid = value
-						updatejson()
-				end,
-		})
-		--Sand Village
-		Tab:AddDropdown({
-				Name = "🌎 Sand Village",
-				Default = getgenv().SendVilla,
-				Options = {"เลือกด่านที่ต้องการฟาร์ม", "naruto_raid_1"},
-				Callback = function(value)
-						getgenv().SendVilla = value
-						updatejson()
-				end,
-		})
-		--ตั้งเวลา Raid
-		Tab:AddToggle({
-			Name = "⚙️ ตั้งค่าเวลา Raid อัติโนมัติ",
-			Default = getgenv().takeTimeRaid,
-			Callback = function(x)
-					getgenv().takeTimeRaid = x
-					updatejson()
-			end,
-		})
---#endregion
-
---#region Portal
-		local Tab = Window:MakeTab({ Name = "🏆 Portal Event", Icon = "rbxassetid://6022668966", PremiumOnly = false }) -- PORTAL
-		local Section = Tab:AddSection({ Name = "Portal" })
-		if getgenv().portalnameX == "One Punch Man" or getgenv().portalnameX == "Demon Leaders" or getgenv().portalnameX == "Demon Academy" or getgenv().portalnameX == "csm_contract_0" or getgenv().portalnameX == "csm_contract_1" or getgenv().portalnameX == "csm_contract_2" or getgenv().portalnameX == "csm_contract_3" or getgenv().portalnameX == "csm_contract_4" or getgenv().portalnameX == "csm_contract_5" then
-				print("_")
-		else
-				getgenv().portalnameX = "เลือกระดับ"
-		end
-		portal_select = {"เลือกระดับ","One Punch Man","Demon Leaders","Demon Academy","csm_contract_0","csm_contract_1","csm_contract_2","csm_contract_3","csm_contract_4","csm_contract_5",}
-		Tab:AddDropdown({
-				Name = "💡 เลือกความยาก",
-				Default = getgenv().portalnameX,
-				Options = portal_select,
-				Callback = function(pornname)
-						getgenv().portalnameX = pornname
-						updatejson()
-				end,
-		})
-		Tab:AddToggle({
-				Name = "🏆 ออโต้ฟาร์ม Portal",
-				Default = getgenv().farmprotal,
-				Callback = function(bool)
-						getgenv().farmprotal = bool
-						updatejson()
-				end,
-		})
-		local Section = Tab:AddSection({ Name = "ซื้อ Portal" })
-		Tab:AddButton({
-				Name = "🏆 ซื้อ Portal",
-				Callback = function()
-						if game.PlaceId == 8304191830 then
-							local args = {
-								[1] = tostring(getgenv().portalnameX),
-							}
-							game:GetService("ReplicatedStorage").endpoints.client_to_server.buy_csmportal_shop_item:InvokeServer(unpack(args))
-						end
-				end,
-		})
-		local Section = Tab:AddSection({ Name = "Portal พิเศษ" })
-		Tab:AddToggle({
-				Name = "🏆 เข้า Portal ผู้เล่นอื่นออโต้",
-				Default = getgenv().autoportal,
-				Callback = function(bool)
-						getgenv().autoportal = bool
-						updatejson()
-				end,
 		})
 --#endregion
 
@@ -3879,64 +3326,6 @@ function PjxInit()
 		})
 --#endregion
 
---#region BluemaShop
-		local Tab = Window:MakeTab({Name = "🛒 ร้านค้า",Icon = "rbxassetid://6022668966",PremiumOnly = false,}) -- BLUMA SHOP
-		local Section = Tab:AddSection({ Name = "ร้านบลูม่า" })
-		--ลือกของที่ต้องการซื้อ
-		Tab:AddDropdown({
-			Name = "🔥 เลือกของที่ต้องการซื้อ",
-			Default = getgenv().Buyer1,
-			Options = {"เลือกของที่ต้องการซื้อ", "Summon Ticket", "Lucky Postion", "Star Fruit", "Star Remanent"},
-			Callback = function(Value)
-				getgenv().Buyer1 = Value
-				updatejson()
-			end
-		})
-		--ลือกของที่ต้องการซื้อ
-		Tab:AddDropdown({
-			Name = "🔥 เลือกของที่ต้องการซื้อ",
-			Default = getgenv().Buyer2,
-			Options = {"เลือกของที่ต้องการซื้อ", "Summon Ticket", "Lucky Postion", "Star Fruit", "Star Remanent"},
-			Callback = function(Value)
-				getgenv().Buyer2 = Value
-				updatejson()
-				
-			end
-		})
-		--ลือกของที่ต้องการซื้อ
-		Tab:AddDropdown({
-			Name = "🔥 เลือกของที่ต้องการซื้อ",
-			Default = getgenv().Buyer3,
-			Options = {"เลือกของที่ต้องการซื้อ", "Summon Ticket", "Lucky Postion", "Star Fruit", "Star Remanent"},
-			Callback = function(Value)
-				getgenv().Buyer3 = Value
-				updatejson()
-				
-			end
-		})
-		local Section = Tab:AddSection({ Name = "ร้านทอง" })
-		--ของทั้งหมดในร้านทอง
-		Tab:AddToggle({
-			Name = "🗿 ของทั้งหมดในร้านทอง",
-			Default = getgenv().ShopGold,
-			Callback = function(bool)
-					getgenv().ShopGold = bool
-					updatejson()
-					if getgenv().ShopGold then
-						if game.PlaceId == 8304191830 then
-							local buy_Shopgold = game:GetService("ReplicatedStorage")["_FX_CACHE"]:GetChildren()
-							for i, v in ipairs(buy_Shopgold) do
-								local args = {
-									[1] = tostring(v.Name)
-								}
-								game:GetService("ReplicatedStorage").endpoints.client_to_server.buy_gold_shop_item:InvokeServer(unpack(args))
-							end
-						end
-					end
-			end,
-		})
---#endregion
-
 --###### END UI ######--
 end
 
@@ -3952,74 +3341,45 @@ if isfile(savefilename) then
 	PjxInit()
 else
 	local xdata = {
-		load_check = "1",
-		portalnameX = "csm_contract_0",
-		farmportal = false,
-		buyportal = false,
-		PortalID = "nil",
+
+		-- Save Script
+		AutoLoadTP = true,
+		-- Warp Friends
+		warpfriend = false,
+		-- Auto Start
+		autostart = false,
 		AutoReplay = false,
-		clickTeleport = false,
-		AutoLeave = true,
+		-- Select Mode
+		autoSelectMode = "เลือกโหมดที่ต้องการฟาร์ม",
+		textGem = 0,
 		resultGems = 0,
-		AutoChallenge = false,
-		selectedreward = "star_fruit_random",
-		AutoChallengeAll = false,
-		autoabilities = false,
-		autofarmtp = false,
-		nextStoryauto = false,
+		-- BattlePass
+		BattlePass = 0,
+		-- Select Item Raid
+		autoSelectItem = "เลือกไอเท็มเรท",
+		-- Map
+		world = "nil",
+		level = "nil",
+		difficulty = "nil",
+		levels = {},
+		door = "nil",
+		-- Lock FPS
+		lockfps = false,
+		renderring = false,
+		autoHideUI = false,
+		-- Other
+		questtoday = true,
+
+		-- Webhook
 		webhook = "",
 		weburlfinish = "",
 		webportal = "",
 		dctage = "",
-		sellatwave = 0,
-		lockfps = 30,
-		getgems = 0,
-		autosell = false,
-		removeMap = false,
-		takeTime = 0,
-		dunj1 = false,
-		dunj2 = false,
-		dunj3 = false,
-		dunjnew = false,
-		renderring = false,
-		openlockfps = false,
-		waveteleport = false,
-		autoportal = false,
-		ShopGold = false,
-		questtoday = false,
-		timelock = false,
-		nextLevelINF = false,
-		ijobID = "",
-		followjoin = false,
-		antiafk = false,
-		autogems = false,
-		autofarm = false,
-		autofarmic = false,
-		autostart = false,
-		autostartStory = false,
-		autoloadtp = true,
-		autoupgrade = false,
-		friendOnly = false,
-		warpfriend = false,
-		takeTimeRaid = false,
-		autoHideUI = false,
-		Buyer1 = {},
-		Buyer2 = {},
-		Buyer3 = {},
-		BattlePass = "",
-    levels = {},
-		RaidStrom = "เลือกด่านที่ต้องการฟาร์ม",
-		westCity = "เลือกด่านที่ต้องการฟาร์ม",
-		demonSlayer = "เลือกด่านที่ต้องการฟาร์ม",
-		aotRaid = "เลือกด่านที่ต้องการฟาร์ม",
-		SendVilla = "เลือกด่านที่ต้องการฟาร์ม",
-		raid_freeze = "เลือกด่านที่ต้องการฟาร์ม",
-		raid_entertainment = "เลือกด่านที่ต้องการฟาร์ม",
 
-		difficulty = "nil",
-		world = "nil",
-		level = "nil",
-		door = "nil",
+		-- Job ID
+		jobID = "",
+
+		--Select Unit
 		xselectedUnits = {},
 
 	}
@@ -4030,6 +3390,9 @@ end
 
 --#endregion
 --------------------------------------------------
+
+-- [[ ฟั่งชั่น วางมอน เลือกมอน อัพเกรด ]] --
+
 --#region Plate Unit
 
 function auto_place_units(position)
@@ -4075,144 +3438,142 @@ end
 coroutine.resume(coroutine.create(function()
 	while task.wait(1) do
 		local _wave = game:GetService("Workspace"):WaitForChild("_wave_num")
-		if getgenv().AutoFarm and not getgenv().disableatuofarm then
-			if game.PlaceId ~= 8304191830 then
-				for i, v in ipairs(game.Workspace["_UNITS"]:GetChildren()) do
-					if v:FindFirstChild("_stats") then
-						if v._stats.player.Value == nil then
-							pos_x = v.HumanoidRootPart.Position.X
-							pos_z = v.HumanoidRootPart.Position.Z
-							break
-						end
+		if game.PlaceId ~= 8304191830 then
+			for i, v in ipairs(game.Workspace["_UNITS"]:GetChildren()) do
+				if v:FindFirstChild("_stats") then
+					if v._stats.player.Value == nil then
+						pos_x = v.HumanoidRootPart.Position.X
+						pos_z = v.HumanoidRootPart.Position.Z
+						break
 					end
 				end
-				if game.Workspace._map:FindFirstChild("namek mushroom model") then -- Plannet Namak
-					auto_place_units({
-					  [1] = { x = pos_x, y = 91.80, z = pos_z }, -- ground unit position
-					  [2] = { x = -2959.61, y = 94.53, z = -696.83 }, -- hill unit position
-					  [3] = { x = -2952.06, y = 94.41, z = -721.40 }, -- hill unit position
-					})
-					elseif game.Workspace._map:FindFirstChild("bridge nocollide") then  -- MY HERO
-          auto_place_units({
-            [1] = { x = pos_x, y = -13.24, z = pos_z }, -- ground unit position
-            [2] = { x = -31.49, y = -10.02, z = 21.95 }, -- hill unit position
-            [3] = { x = -54.03, y = -8.89, z = 3.62 }, -- hill unit position
-          })
-				  elseif game.Workspace._map:FindFirstChild("houses_new") then -- Shiganshinu District
-					auto_place_units({
-					  [1] = { x = pos_x, y = 33.74, z = pos_z }, -- ground unit position
-					  [2] = { x = -3026.78, y = 38.41, z = -677.81 }, -- hill unit position
-					  [3] = { x = -3019.03, y = 38.41, z = -689.49 }, -- hill unit position
-					})
-				  elseif game.Workspace._map:FindFirstChild("Snow Particles") then -- Snowy Town
-					auto_place_units({
-					  [1] = { x = pos_x, y = 34.34, z = pos_z }, -- ground unit position
-					  [2] = { x = -2876.02, y = 37.24, z = -150.81 }, -- hill unit position
-					  [3] = { x = -2879.09, y = 39.57, z = -124.25 }, -- hill unit position
-					})
-				  elseif game.Workspace._map:FindFirstChild("sand_gate") then -- Hidden Sand Village
-					auto_place_units({
-					  [1] = { x = pos_x, y = 25.28, z = pos_z }, -- ground unit position
-					  [2] = { x = -910.64, y = 33.14, z = 294.41 }, -- hill unit position
-					  [3] = { x = -893.90, y = 29.56, z = 318.74 }, -- hill unit position
-					})
-				  elseif game.Workspace._map:FindFirstChild("icebergs") then -- Marine's Ford
-					auto_place_units({
-					  [1] = { x = pos_x, y = 25.21, z = pos_z }, -- ground unit position
-					  [2] = { x = -2571.46, y = 29.50, z = -49.31 }, -- hill unit position
-					  [3] = { x = -2581.62, y = 28.35, z = -66.97 }, -- hill unit position
-					})
-				  elseif game.Workspace._map:FindFirstChild("Helicopter Pad") then -- Ghoul City
-					auto_place_units({
-					  [1] = { x = pos_x, y = 58.58, z = pos_z }, -- ground unit position
-					  [2] = { x = -2985.60, y = 66.70, z = -54.09 }, -- hill unit position
-					  [3] = { x = -2956.22, y = 62.82, z = -49.40 }, -- hill unit position
-					})
-				  elseif game.Workspace._map:FindFirstChild("castle top") then -- Hollow World
-					auto_place_units({
-					  [1] = { x = pos_x, y = 132.66, z = pos_z }, -- ground unit position
-					  [2] = { x = -184.33, y = 136.34, z = -757.71 }, -- hill unit position
-					  [3] = { x = -174.58, y = 136.34, z = -710.48 }, -- hill unit position
-					})
-				  elseif game.Workspace._map:FindFirstChild("Village Path") then -- Ant Kingdom
-					auto_place_units({
-					  [1] = { x = pos_x, y = 23.01, z = pos_z }, -- ground unit position
-					  [2] = { x = -145.86, y = 26.72, z = 2965.56 }, -- hill unit position
-					  [3] = { x = -191.47, y = 27.20, z = 2952.01 }, -- hill unit position
-					})
-				  elseif game.Workspace._map:FindFirstChild("wooden stacks") then -- Magic Town
-					auto_place_units({
-					  [1] = { x = pos_x, y = 6.74, z = pos_z }, -- ground unit position
-					  [2] = { x = -596.36, y = 13.99, z = -824.33 }, -- hill unit position
-					  [3] = { x = -586.75, y = 13.88, z = -824.23 }, -- hill unit position
-					})
-				  elseif game.Workspace._map:FindFirstChild("skeleton") then -- Cursed Academy
-					auto_place_units({
-					  [1] = { x = pos_x, y = 1.23, z = pos_z }, -- ground unit position
-					  [2] = { x = -167.89, y = 5.03, z = -41.00 }, -- hill unit position
-					  [3] = { x = -124.5, y = 4.86, z = -44.06 }, -- hill unit position
-					})
-				  elseif game.Workspace._map:FindFirstChild("SpaceCenter") then -- Clover Kingdom
-					auto_place_units({
-					  [1] = { x = pos_x, y = 15.25, z = pos_z }, -- ground unit position
-					  [2] = { x = -107.81, y = 19.62, z = -526.78 }, -- hill unit position
-					  [3] = { x = -111.71, y = 19.62, z = -502.85 }, -- hill unit position
-					})
-				  elseif game.Workspace._map:FindFirstChild("boat and bus") then  -- Devil Portal
-					auto_place_units({
-					  [1] = { x = pos_x, y = 1, z = pos_z }, -- ground unit position
-					  [2] = { x = -361.46, y = 3.91, z = -544.41 }, -- hill unit position
-					  [3] = { x = -385.43, y = 5.86, z = -559.16 }, -- hill unit position
-					})
-				  elseif game.Workspace._map:FindFirstChild("LanternsGround") then 
-					auto_place_units({
-					  [1] = { x = pos_x, y = 122.06, z = pos_z }, -- ground unit position
-					  [2] = { x = 394.85, y = 124.44, z = -74.23 }, -- hill unit position
-					  [3] = { x = 365.35, y = 125.39, z = -95.78 }, -- hill unit position
-					})
-				  elseif game.Workspace:FindFirstChild("opm_1") then -- Alien Spaceship
-					auto_place_units({
-					  [1] = { x = pos_x, y = 361.21, z = pos_z }, -- ground unit position
-					  [2] = { x = -336.19, y = 365.26, z = 1389.11 }, -- hill unit position
-					  [3] = { x = -336.18, y = 365.26, z = 1391.78 }, -- hill unit position
-					})
-				  elseif game.Workspace._map:FindFirstChild("ThreeDTextObject") then -- RAID UCHIHA
-					auto_place_units({
-					  [1] = { x = pos_x, y = 536.89, z = pos_z }, -- ground unit position
-					  [2] = { x = 304.59, y = 539.89, z = -588.45 }, -- hill unit position
-					  [3] = { x = 267.66, y = 539.89, z = -560.54 }, -- hill unit position
-					})
-				  elseif game.Workspace._map:FindFirstChild("misc nonocollide obstacles") then -- 7DPS
-					auto_place_units({
-					  [1] = { x = pos_x, y = 212.96, z = pos_z }, -- ground unit position
-					  [2] = { x = -87.39, y = 216.99, z = -214.06 }, -- hill unit position
-					  [3] = { x = -102.37, y = 219.20, z = -204.66 }, -- hill unit position
-					})
-				  elseif game.Workspace._map:FindFirstChild("parking spots") then
-					auto_place_units({
-					  [1] = { x = pos_x, y = 36.04, z = pos_z }, -- ground unit position
-					  [2] = { x = -188.33, y = 46.76, z = 552.44 }, -- hill unit position
-					  [3] = { x = -179.47, y = 46.63, z = 552.69 }, -- hill unit position
-					})
-          elseif game.Workspace._map:FindFirstChild("vegetation") then  -- RAID WESTCITY
-          auto_place_units({
-						[1] = { x = pos_x, y = 19.76, z = pos_z }, -- ground unit position
-            [2] = { x = -2334.15, y = 31.41, z = -79.33 }, -- hill unit position
-            [3] = { x = -2339.57, y = 32.03, z = -90.32 }, -- hill unit position
-          })
-					elseif game.Workspace._map:FindFirstChild("crashed spaceships") then  -- RAID Freeze
-          auto_place_units({
-            [1] = { x = pos_x, y = 19.76, z = pos_z }, -- ground unit position
-            [2] = { x = -2334.15, y = 31.41, z = -79.33 }, -- hill unit position
-            [3] = { x = -2339.57, y = 32.03, z = -90.32 }, -- hill unit position
-          })
-					elseif game.Workspace._map:FindFirstChild("Support_Beam") then  -- RAID Gyegoro
-          auto_place_units({
-            [1] = { x = pos_x, y = 495.600, z = pos_z }, -- ground unit position 
-            [2] = { x = -130.05, y = 504.78, z = -93.73 }, -- hill unit position -130.05752563476562, 504.7899169921875, -93.732666015625
-            [3] = { x = -97.27, y = -97.27, z = -92.03 }, -- hill unit position -97.27552032470703, 500.6242980957031, -92.03937530517578
-          })
-				end
+			end
+			if game.Workspace._map:FindFirstChild("namek mushroom model") then -- Plannet Namak
+				auto_place_units({
+					[1] = { x = pos_x, y = 91.80, z = pos_z }, -- ground unit position
+					[2] = { x = -2959.61, y = 94.53, z = -696.83 }, -- hill unit position
+					[3] = { x = -2952.06, y = 94.41, z = -721.40 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("bridge nocollide") then  -- MY HERO
+				auto_place_units({
+					[1] = { x = pos_x, y = -13.24, z = pos_z }, -- ground unit position
+					[2] = { x = -31.49, y = -10.02, z = 21.95 }, -- hill unit position
+					[3] = { x = -54.03, y = -8.89, z = 3.62 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("houses_new") then -- Shiganshinu District
+				auto_place_units({
+					[1] = { x = pos_x, y = 33.74, z = pos_z }, -- ground unit position
+					[2] = { x = -3026.78, y = 38.41, z = -677.81 }, -- hill unit position
+					[3] = { x = -3019.03, y = 38.41, z = -689.49 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("Snow Particles") then -- Snowy Town
+				auto_place_units({
+					[1] = { x = pos_x, y = 34.34, z = pos_z }, -- ground unit position
+					[2] = { x = -2876.02, y = 37.24, z = -150.81 }, -- hill unit position
+					[3] = { x = -2879.09, y = 39.57, z = -124.25 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("sand_gate") then -- Hidden Sand Village
+				auto_place_units({
+					[1] = { x = pos_x, y = 25.28, z = pos_z }, -- ground unit position
+					[2] = { x = -910.64, y = 33.14, z = 294.41 }, -- hill unit position
+					[3] = { x = -893.90, y = 29.56, z = 318.74 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("icebergs") then -- Marine's Ford
+				auto_place_units({
+					[1] = { x = pos_x, y = 25.21, z = pos_z }, -- ground unit position
+					[2] = { x = -2571.46, y = 29.50, z = -49.31 }, -- hill unit position
+					[3] = { x = -2581.62, y = 28.35, z = -66.97 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("Helicopter Pad") then -- Ghoul City
+				auto_place_units({
+					[1] = { x = pos_x, y = 58.58, z = pos_z }, -- ground unit position
+					[2] = { x = -2985.60, y = 66.70, z = -54.09 }, -- hill unit position
+					[3] = { x = -2956.22, y = 62.82, z = -49.40 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("castle top") then -- Hollow World
+				auto_place_units({
+					[1] = { x = pos_x, y = 132.66, z = pos_z }, -- ground unit position
+					[2] = { x = -184.33, y = 136.34, z = -757.71 }, -- hill unit position
+					[3] = { x = -174.58, y = 136.34, z = -710.48 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("Village Path") then -- Ant Kingdom
+				auto_place_units({
+					[1] = { x = pos_x, y = 23.01, z = pos_z }, -- ground unit position
+					[2] = { x = -145.86, y = 26.72, z = 2965.56 }, -- hill unit position
+					[3] = { x = -191.47, y = 27.20, z = 2952.01 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("wooden stacks") then -- Magic Town
+				auto_place_units({
+					[1] = { x = pos_x, y = 6.74, z = pos_z }, -- ground unit position
+					[2] = { x = -596.36, y = 13.99, z = -824.33 }, -- hill unit position
+					[3] = { x = -586.75, y = 13.88, z = -824.23 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("skeleton") then -- Cursed Academy
+				auto_place_units({
+					[1] = { x = pos_x, y = 1.23, z = pos_z }, -- ground unit position
+					[2] = { x = -167.89, y = 5.03, z = -41.00 }, -- hill unit position
+					[3] = { x = -124.5, y = 4.86, z = -44.06 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("SpaceCenter") then -- Clover Kingdom
+				auto_place_units({
+					[1] = { x = pos_x, y = 15.25, z = pos_z }, -- ground unit position
+					[2] = { x = -107.81, y = 19.62, z = -526.78 }, -- hill unit position
+					[3] = { x = -111.71, y = 19.62, z = -502.85 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("boat and bus") then  -- Devil Portal
+				auto_place_units({
+					[1] = { x = pos_x, y = 1, z = pos_z }, -- ground unit position
+					[2] = { x = -361.46, y = 3.91, z = -544.41 }, -- hill unit position
+					[3] = { x = -385.43, y = 5.86, z = -559.16 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("LanternsGround") then 
+				auto_place_units({
+					[1] = { x = pos_x, y = 122.06, z = pos_z }, -- ground unit position
+					[2] = { x = 394.85, y = 124.44, z = -74.23 }, -- hill unit position
+					[3] = { x = 365.35, y = 125.39, z = -95.78 }, -- hill unit position
+				})
+				elseif game.Workspace:FindFirstChild("opm_1") then -- Alien Spaceship
+				auto_place_units({
+					[1] = { x = pos_x, y = 361.21, z = pos_z }, -- ground unit position
+					[2] = { x = -336.19, y = 365.26, z = 1389.11 }, -- hill unit position
+					[3] = { x = -336.18, y = 365.26, z = 1391.78 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("ThreeDTextObject") then -- RAID UCHIHA
+				auto_place_units({
+					[1] = { x = pos_x, y = 536.89, z = pos_z }, -- ground unit position
+					[2] = { x = 304.59, y = 539.89, z = -588.45 }, -- hill unit position
+					[3] = { x = 267.66, y = 539.89, z = -560.54 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("misc nonocollide obstacles") then -- 7DPS
+				auto_place_units({
+					[1] = { x = pos_x, y = 212.96, z = pos_z }, -- ground unit position
+					[2] = { x = -87.39, y = 216.99, z = -214.06 }, -- hill unit position
+					[3] = { x = -102.37, y = 219.20, z = -204.66 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("parking spots") then
+				auto_place_units({
+					[1] = { x = pos_x, y = 36.04, z = pos_z }, -- ground unit position
+					[2] = { x = -188.33, y = 46.76, z = 552.44 }, -- hill unit position
+					[3] = { x = -179.47, y = 46.63, z = 552.69 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("vegetation") then  -- RAID WESTCITY
+				auto_place_units({
+					[1] = { x = pos_x, y = 19.76, z = pos_z }, -- ground unit position
+					[2] = { x = -2334.15, y = 31.41, z = -79.33 }, -- hill unit position
+					[3] = { x = -2339.57, y = 32.03, z = -90.32 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("crashed spaceships") then  -- RAID Freeze
+				auto_place_units({
+					[1] = { x = pos_x, y = 19.76, z = pos_z }, -- ground unit position
+					[2] = { x = -2334.15, y = 31.41, z = -79.33 }, -- hill unit position
+					[3] = { x = -2339.57, y = 32.03, z = -90.32 }, -- hill unit position
+				})
+				elseif game.Workspace._map:FindFirstChild("Support_Beam") then  -- RAID Gyegoro
+				auto_place_units({
+					[1] = { x = pos_x, y = 495.600, z = pos_z }, -- ground unit position 
+					[2] = { x = -130.05, y = 504.78, z = -93.73 }, -- hill unit position -130.05752563476562, 504.7899169921875, -93.732666015625
+					[3] = { x = -97.27, y = -97.27, z = -92.03 }, -- hill unit position -97.27552032470703, 500.6242980957031, -92.03937530517578
+				})
 			end
 		end
 	end
@@ -4220,39 +3581,423 @@ end))
 
 --#endregion 
 
---#region Lag Server
+--#region Auto Upgrade
+coroutine.resume(coroutine.create(function()
+	while task.wait(0) do
+		local _wave = game:GetService("Workspace"):WaitForChild("_wave_num")
+		if _wave.Value >= 6 then
+			pcall(function() --///
+				repeat task.wait() until game:GetService("Workspace"):WaitForChild("_UNITS")
+				for i, v in ipairs(game:GetService("Workspace")["_UNITS"]:GetChildren()) do
+					if v:FindFirstChild("_stats") then
+						if tostring(v["_stats"].player.Value) == game.Players.LocalPlayer.Name and v["_stats"].xp.Value >= 0 then
+							if v.Name == "wendy" or v.Name == "wendy:shiny" or v.Name == "sakura" then
+								-- print(v.Name)
+							else
+								game:GetService("ReplicatedStorage").endpoints.client_to_server.upgrade_unit_ingame:InvokeServer(v)
+							end
+						end
+					end
+				end
+			end)
+		end
+	end
+end))
+
+--#endregion 
+
+--#region Auto Abilities
+getgenv().autoabilityerr = false
+function autoabilityfunc()
+	pcall(function() --///
+		repeat task.wait() until game:GetService("Workspace"):WaitForChild("_UNITS")
+		for i, v in ipairs(game:GetService("Workspace")["_UNITS"]:GetChildren()) do
+			if v:FindFirstChild("_stats") then
+				if v._stats:FindFirstChild("player") and v._stats:FindFirstChild("xp") then
+					if v.Name == "ichigo_mugetsu_evolved" or v.Name == "ichigo_mugetsu" then
+						print('ichigo')
+					elseif v.Name == "gojo_evolved" or v.Name == "kisuke_evolved" then
+						game:GetService("ReplicatedStorage").endpoints.client_to_server.use_active_attack:InvokeServer(v)
+					elseif v.Name == "wendy" or v.Name == "erwin" then
+						game:GetService("ReplicatedStorage").endpoints.client_to_server.use_active_attack:InvokeServer(v)
+						task.wait(11)
+					end
+				end
+			end
+		end
+	end)
+end
+coroutine.resume(coroutine.create(function()
+	while task.wait(2) do
+		if game.PlaceId ~= 8304191830 then
+			pcall(function()
+				autoabilityfunc()
+			end)
+		end
+	end
+end))
+--#endregion
+
+--#region SelectUnit
 
 coroutine.resume(coroutine.create(function()
-	while task.wait(1) do
-		if game.PlaceId ~= 8304191830 then
-			if getgenv().timelock then
-				while wait(getgenv().takeTime) do
-					if getgenv().timelock == false then
+  if game.PlaceId == 8304191830 then
+    handle_select_units()
+    local collection = plr.PlayerGui:WaitForChild("collection")
+    collection:GetPropertyChangedSignal("Enabled"):Connect(function()
+      if collection.Enabled == false then
+        handle_select_units()
+      end
+    end)
+  end
+end))
+--#endregion
+
+-- [[ จบฟั่งชั่นอัพเกรด + วางมอน ]] --
+--------------------------------------------------
+
+
+-- [[ ฟังชั่นสำหรับวาปเข้าแมพ ]] --
+
+--#region FarmGem
+
+function farmGem()
+	if game.PlaceId == 8304191830 then
+		local cpos = plr.Character.HumanoidRootPart.CFrame
+		if tostring(Workspace._LOBBIES.Story[getgenv().door].Owner.Value) ~= plr.Name then
+			for _, v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetDescendants()) do
+				if v.Name == "Owner" and v.Value == nil then
+					local args = {
+						[1] = tostring(v.Parent.Name),
+					}
+					game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer(unpack(args))
+					task.wait(4)
+					local args = {
+						[1] = tostring(v.Parent.Name), -- Lobby
+						[2] = "namek_infinite", -- World
+						[3] = false, -- Friends Only or not
+						[4] = "Hard",
+					}
+					game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(unpack(args))
+					task.wait(2)
+					local args = {
+						[1] = tostring(v.Parent.Name),
+					}
+					game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
+					game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
+					getgenv().door = v.Parent.Name
+					plr.Character.HumanoidRootPart.CFrame = v.Parent.Door.CFrame
+					break
+				end
+			end
+		end
+		task.wait()
+		plr.Character.HumanoidRootPart.CFrame = cpos
+	end
+end
+
+--#endregion
+
+--#region Farm Pass
+
+function farmPass()
+	if game.PlaceId == 8304191830 then
+		local cpos = plr.Character.HumanoidRootPart.CFrame
+		if tostring(Workspace._LOBBIES.Story[getgenv().door].Owner.Value) ~= plr.Name then
+			for _, v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetDescendants()) do
+				if v.Name == "Owner" and v.Value == nil then
+					local args = {
+						[1] = tostring(v.Parent.Name),
+					}
+					game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer(unpack(args))
+					task.wait(4)
+					local args = {
+						[1] = tostring(v.Parent.Name), -- Lobby
+						[2] = "aot_infinite", -- World
+						[3] = false, -- Friends Only or not
+						[4] = "Hard",
+					}
+					game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(unpack(args))
+					task.wait(2)
+					local args = {
+						[1] = tostring(v.Parent.Name),
+					}
+					game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
+					game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
+					getgenv().door = v.Parent.Name
+					plr.Character.HumanoidRootPart.CFrame = v.Parent.Door.CFrame
+					break
+				end
+			end
+		end
+		task.wait()
+		plr.Character.HumanoidRootPart.CFrame = cpos
+	end
+end
+
+--#endregion
+
+--#region FarmLevel
+
+function farmLevel()
+	if game.PlaceId == 8304191830 then
+		local cpos = plr.Character.HumanoidRootPart.CFrame
+		if tostring(Workspace._LOBBIES.Story[getgenv().door].Owner.Value) ~= plr.Name then
+			for _, v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetDescendants()) do
+				if v.Name == "Owner" and v.Value == nil then
+					local args = {
+						[1] = tostring(v.Parent.Name),
+					}
+					game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer(unpack(args))
+					task.wait(4)
+					if getgenv().autoSelectMode == "ฟาร์มเพชร" then
+						local args = {
+							[1] = tostring(v.Parent.Name), -- Lobby
+							[2] = "namek_level_1", -- World
+							[3] = false, -- Friends Only or not
+							[4] = "Normal",
+						}
+						game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(unpack(args))
+					end
+					task.wait(2)
+					local args = {
+						[1] = tostring(v.Parent.Name),
+					}
+					game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
+					game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
+					getgenv().door = v.Parent.Name
+					plr.Character.HumanoidRootPart.CFrame = v.Parent.Door.CFrame
+					break
+				end
+			end
+		end
+		task.wait()
+		plr.Character.HumanoidRootPart.CFrame = cpos
+	end
+end
+
+--#endregion
+
+--#region Farm Clstel
+
+function farmCaltans()
+
+	if getgenv().autoSelectMode == "ฟาร์มหอคอย" then
+		if game.PlaceId == 8304191830 then
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new( 12423.1855, 155.24025, 3198.07593, -1.34111269e-06, -2.02512282e-08, 1, 3.91705386e-13, 1, 2.02512282e-08, -1, 4.18864542e-13, -1.34111269e-06 )
+			getgenv().infinityroom = 0
+			for i, v in pairs( game:GetService("Players")[game.Players.LocalPlayer.Name].PlayerGui.InfiniteTowerUI.LevelSelect.InfoFrame.LevelButtons :GetChildren() ) do
+				if v.Name == "FloorButton" then
+					if v.clear.Visible == false and v.Locked.Visible == false then
+						local room = string.split(v.Main.text.Text, " ")
+						local args = {
+							[1] = tonumber(room[2]),
+						}
+						game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_infinite_tower :InvokeServer(unpack(args))
+						getgenv().infinityroom = tonumber(room[2])
 						break
 					end
-					local table1 = {}
-					local table2 = {}
-					local function loop(v1,v2)
-						for i = v1,v2 do
-							table.insert(table1, table2)
+				end
+			end
+			task.wait(6)
+		end
+	elseif getgenv().autoSelectMode == "ฟาร์มหอคอย" then
+		if game.PlaceId == 8304191830 then
+			local args = {
+				[1] = "_lobbytemplate_event330",
+			}
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby :InvokeServer(unpack(args))
+			task.wait(5)
+		end
+	end
+
+end
+
+--#endregion
+
+--#region story and Chicken
+
+tp_check = true
+function storyFarm()
+	if getgenv().autoSelectMode == "ฟาร์มสตอรี่" or getgenv().autoSelectMode == "ฟาร์มไก่เพชร"  then
+		if game.PlaceId == 8304191830 then
+			task.wait(5)
+			local cpos = plr.Character.HumanoidRootPart.CFrame
+			if tp_check then
+				for _, v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetChildren()) do
+					check_door = tostring(game:GetService("Workspace")["_LOBBIES"].Story[v.Name].Owner.Value)
+					if check_door == "nil"  then
+						game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["_LOBBIES"].Story[v.Name].Door.CFrame * CFrame.new(0, 0, 1)
+						wait(1)
+						--// Check ShickenFram
+						local checkNaamek = game:GetService("Players").LocalPlayer.PlayerGui.LevelSelectGui.MapSelect.Main.Wrapper.Container.namek.Main.Container.LevelsCleared.V.Text
+						if checkNaamek == "6/6" and getgenv().autoSelectMode == "ฟาร์มไก่เพชร" then
+							getgenv().autoSelectMode = "ฟาร์มเพชร"
+							updatejson()
+							wait(2)
+							game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
 						end
-					end
-					local function crash(v1) 
-						for i = 1,v1 do
-							table.insert(table2[1], {})
-						end 
-					
-						if 499999/(v1+2) then
-							loop(1,499999/(v1+2))
-						else
-							loop(1,499999)
+						--//---------------------
+						broke = false
+						for g, j in ipairs(game:GetService("Players").LocalPlayer.PlayerGui.LevelSelectGui.MapSelect.Main.Wrapper.Container :GetChildren()) do
+							if j:IsA("ImageButton") then
+								if j.Name == "ComingSoon" then
+								else
+									local ClearStory = j.Main.Container.LevelsCleared:GetChildren()
+									for l, s in pairs(ClearStory) do
+										if s.Name == "V" then
+											chLevel = s.Text
+											waves = chLevel:split("/")
+											if waves[1] == "6" then
+												wait(1)
+											else
+												
+												st_farm = j.Name .. "_level_" .. waves[1] + 1
+												broke = true
+												wait(1)
+												local args = {
+													[1] = tostring(v.Name), -- Lobby
+													[2] = tostring(st_farm), -- World
+													[3] = false, -- Friends Only or not
+													[4] = "Normal",
+												}
+												game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(unpack(args))
+												task.wait(5)
+												local args = {
+													[1] = tostring(v.Name),
+												}
+												game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
+												break
+											end
+										end
+									end
+								end
+							end
+							if broke then
+								break
+							end
 						end
-						game:GetService("RobloxReplicatedStorage").SetPlayerBlockList:FireServer(table1)
+						tp_check = false
+						break
 					end
-					table.insert(table2, {})
-					game:GetService("NetworkClient"):SetOutgoingKBPSLimit(math.huge)
-					crash(250)
-				end					
+				end
+			end
+			wait(2)
+		end
+	end
+end
+
+--#endregion
+
+--#region FarmGem in MapSelect
+
+function farmGMAP()
+	if game.PlaceId == 8304191830 then
+		local cpos = plr.Character.HumanoidRootPart.CFrame
+		if tostring(Workspace._LOBBIES.Story[getgenv().door].Owner.Value) ~= plr.Name then
+			for _, v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetDescendants()) do
+				if v.Name == "Owner" and v.Value == nil then
+					local args = {
+						[1] = tostring(v.Parent.Name),
+					}
+					game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer(unpack(args))
+					task.wait(4)
+					local args = {
+						[1] = tostring(v.Parent.Name), -- Lobby
+						[2] = getgenv().level, -- World
+						[3] = false, -- Friends Only or not
+						[4] = getgenv().difficulty,
+					}
+					game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(unpack(args))
+					task.wait(2)
+					local args = {
+						[1] = tostring(v.Parent.Name),
+					}
+					game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
+					game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
+					getgenv().door = v.Parent.Name
+					plr.Character.HumanoidRootPart.CFrame = v.Parent.Door.CFrame
+					break
+				end
+			end
+		end
+		task.wait()
+		plr.Character.HumanoidRootPart.CFrame = cpos
+	end
+end
+
+--#endregion
+
+------ [[ เลือกโหมดที่ต้องการฟาร์ม ]] ------
+
+--#region Functions SelectMode
+function modefarm()
+	if getgenv().autoSelectMode == "ฟาร์มเพชร" then
+		farmGem()
+		task.wait(30)
+	end
+
+	if getgenv().autoSelectMode == "ฟาร์ม BattlePass" then
+		farmPass()
+		task.wait(30)
+	end
+
+	if getgenv().autoSelectMode == "ฟาร์มเวลตัวละคร" then
+		farmLevel()
+		task.wait(30)
+	end
+
+	if getgenv().autoSelectMode == "ฟาร์มหอคอย" then
+		farmCaltans()
+		task.wait(30)
+	end
+
+	if getgenv().autoSelectMode == "ฟาร์มสตอรี่" or getgenv().autoSelectMode == "ฟาร์มไก่เพชร" then
+		storyFarm()
+		task.wait(30)
+	end
+
+	if getgenv().autoSelectMode == "ฟาร์มเพชรเลือกด่าน" then
+		farmGMAP()
+		task.wait(30)
+	end
+
+end
+--#endregion
+
+--#region Auto Starts
+
+coroutine.resume(coroutine.create(function()
+	while wait(3) do
+		if getgenv().autostart then
+			modefarm()
+		end
+	end
+end))
+
+--#endregion
+
+-- [[ จบฟังชั่นเข้าแมพ ]] --
+--------------------------------------------------
+
+
+-- [[ ฟังชั่นเมื่อจบเกมส์ ]] --
+
+--#region Check TP Wave Battlepass
+
+coroutine.resume(coroutine.create(function()
+	while task.wait() do
+		if game.PlaceId ~= 8304191830 then
+			local _wave = game:GetService("Workspace"):WaitForChild("_wave_num")
+			if getgenv().autoSelectMode == "ฟาร์ม BattlePass" and tonumber(_wave.Value) >= tonumber(40)		then
+				task.wait(2)
+				if tonumber(getgenv().BattlePass) >= tonumber(getgenv().textGem)  then
+					pcall(function () webhook_finish()  end)
+				else
+					pcall(function () webhook()  end)
+				end
+				task.wait(2)
+				game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
 			end
 		end
 	end
@@ -4260,128 +4005,357 @@ end))
 
 --#endregion
 
---#region GameFinished
+--#region Check Farm Gem
+function amReplay()
+	while task.wait() do
+		if game.PlaceId ~= 8304191830 then
+			if getgenv().AutoReplay then
+				-- sell unit
+				repeat task.wait() until game:GetService("Workspace"):WaitForChild("_UNITS")
+				for i, v in ipairs(game:GetService("Workspace")["_UNITS"]:GetChildren()) do
+					repeat task.wait() until v:WaitForChild("_stats")
+					if tostring(v["_stats"].player.Value) == game.Players.LocalPlayer.Name then
+						repeat task.wait() until v:WaitForChild("_stats"):WaitForChild("upgrade")
+						game:GetService("ReplicatedStorage").endpoints.client_to_server.sell_unit_ingame:InvokeServer(v)
+					end
+				end
+				--
+			end
+		end
+	end
+end
+
+coroutine.resume(coroutine.create(function()
+	while task.wait() do
+		if game.PlaceId ~= 8304191830 then
+			--#region Teleport Gem
+			local _wave = game:GetService("Workspace"):WaitForChild("_wave_num")
+			if getgenv().autoSelectMode == "ฟาร์มเพชร" and  _wave.Value >= 25 then
+				if tonumber(getgenv().textGem) <= 1 then
+					pcall(function () webhook_finish()  end)
+					task.wait(3)
+					break
+				else
+					if getgenv().AutoReplay then
+						amReplay()
+						break
+					end
+				end
+			end
+			--#endregion
+		end
+	end
+end))
+
+--#endregion
+
+--#region Check Gamefinish
+function gameisFinishAuto()
+	task.wait(4)
+	local resultx = tostring(LocalPlayer.PlayerGui.ResultsUI.Holder.Title.Text)
+	
+	-- // Replay Everthing // --
+	if getgenv().AutoReplay and  getgenv().autoSelectMode == "เลือกโหมดที่ต้องการฟาร์ม"  then
+		task.wait()
+		pcall(function() webhook() end)
+		local a = { [1] = "replay" }
+		game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
+		game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
+		task.wait(300)
+		game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
+		task.wait(100)
+		game:Shutdown()
+	end
+
+	-- // Raid // --
+	if getgenv().autoSelectMode == "ฟาร์มไอเท็มเรด" then
+		task.wait(3)
+
+		if resultx == "VICTORY" then
+			print('Victory')
+		else
+			if getgenv().AutoReplay then
+				local a = { [1] = "replay" }
+				game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
+				game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
+				task.wait(300)
+				game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
+				task.wait(100)
+				game:Shutdown()
+			else
+				game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
+				task.wait(300)
+				game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
+				task.wait(100)
+				game:Shutdown()
+			end
+		end
+
+		local itemDifference = getItemChangesNormal(getgenv().startingInventoryNormalItems, getNormalItems())
+		for name, amount in pairs(itemDifference) do
+			if getgenv().autoSelectMode == "ฟาร์มไอเท็มเรด" and getgenv().autoSelectItem == "Alien Scouter" and name == "west_city_frieza_item" then
+				getgenv().textGem = tonumber(getgenv().textGem) - amount
+				if tonumber(getgenv().textGem) <= 1 then
+					pcall(function () webhook_finish() end)
+					updatejson()
+					wait(99)
+				else
+					pcall(function() webhook() end)
+				end
+				updatejson()
+				task.wait(1)
+				break
+			elseif getgenv().autoSelectMode == "ฟาร์มไอเท็มเรด" and getgenv().autoSelectItem == "Tomoe" and name == "uchiha_item" then
+				getgenv().textGem = tonumber(getgenv().textGem) - amount
+				if tonumber(getgenv().textGem) <= 1 then
+					pcall(function () webhook_finish() end)
+					updatejson()
+					wait(99)
+				else
+					pcall(function() webhook() end)
+				end
+				updatejson()
+				task.wait(1)
+				break
+			elseif getgenv().autoSelectMode == "ฟาร์มไอเท็มเรด" and getgenv().autoSelectItem == "Entertain Shard" and name == "entertainment_district_item" then
+				getgenv().textGem = tonumber(getgenv().textGem) - amount
+				if tonumber(getgenv().textGem) <= 1 then
+					pcall(function () webhook_finish() end)
+					updatejson()
+					wait(99)
+				else
+					pcall(function() webhook() end)
+				end
+				updatejson()
+				task.wait(1)
+				break
+			elseif getgenv().autoSelectMode == "ฟาร์มไอเท็มเรด" and getgenv().autoSelectItem == "Demon Shard" and name == "april_symbol" then
+				getgenv().textGem = tonumber(getgenv().textGem) - amount
+				if tonumber(getgenv().textGem) <= 1 then
+					pcall(function () webhook_finish() end)
+					updatejson()
+					wait(99)
+				else
+					pcall(function() webhook() end)
+				end
+				updatejson()
+				task.wait(1)
+				break
+			elseif getgenv().autoSelectMode == "ฟาร์มไอเท็มเรด" and getgenv().autoSelectItem == "Relic Shard" and name == "relic_shard" then
+				getgenv().textGem = tonumber(getgenv().textGem) - amount
+				if tonumber(getgenv().textGem) <= 0 then
+					pcall(function () webhook_finish() end)
+					updatejson()
+					wait(99)
+				else
+					pcall(function() webhook() end) 
+				end
+				updatejson()
+				task.wait(1)
+				break
+			end
+		end
+
+		if getgenv().AutoReplay then
+			local a = { [1] = "replay" }
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
+			wait(99)
+		else
+			game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
+			task.wait(300)
+			game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
+			task.wait(100)
+			game:Shutdown()
+		end
+	end
+
+	-- // Story --
+	if getgenv().autoSelectMode == "ฟาร์มสตอรี่" then
+		pcall(function() webhook() end)
+		if resultx == "VICTORY" then
+			local args = {
+				[1] = "next_story"
+			}
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(args))
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(args))
+			wait(99)
+		else
+			local a = { [1] = "replay" }
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
+			wait(99)
+		end
+	end
+
+	-- // Farm Gem and Farm Gem in Map Select --
+	if getgenv().autoSelectMode == "ฟาร์มเพชร" or getgenv().autoSelectMode == "ฟาร์มเพชรเลือกด่าน" then
+		task.wait(2)
+		pcall(function() webhook() end)
+		if getgenv().AutoReplay then
+			local a = { [1] = "replay" }
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
+			task.wait(300)
+			game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
+			task.wait(100)
+			game:Shutdown()
+		else
+			task.wait(2)
+			game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
+			task.wait(100)
+			game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
+			task.wait(300)
+			game:Shutdown()
+		end
+	end
+
+	-- // infinityTower --
+	if getgenv().autoSelectMode == "ฟาร์มหอคอย" then
+		task.wait(5)
+		local resultx = tostring(LocalPlayer.PlayerGui.ResultsUI.Holder.Title.Text)
+		infTower_check = game:GetService("Players").LocalPlayer.PlayerGui.ResultsUI.Holder.LevelName.Text
+		infinityTower = infTower_check:split(" ")
+		
+		if resultx == "VICTORY" then
+			if tonumber(infinityTower[4]) >= tonumber(getgenv().textGem) then
+				pcall(function() webhook_finish() end)
+			else
+				pcall(function() webhook() end)
+				game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_infinite_tower_from_game:InvokeServer()
+				game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_infinite_tower_from_game:InvokeServer()
+				wait(99)
+			end
+		else
+			local a = { [1] = "replay" }
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
+			wait(99)
+		end
+	end
+
+	--// Level Players --//
+	if getgenv().autoSelectMode == "ฟาร์มเวลตัวละคร" then
+		levePlayers = LocalPlayer.PlayerGui.spawn_units.Lives.Main.Desc.Level.Text
+		levelCheck = levePlayers:split(" ")
+		if tonumber(levelCheck[2]) >= tonumber(getgenv().textGem) then
+			pcall(function() webhook_finish() end)
+			task.wait(3)
+			wait(99)
+		else
+			pcall(function() webhook() end)
+			local a = { [1] = "replay" }
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
+			wait(99)
+		end
+	end
+
+	--// Farm Chickent --//
+	if getgenv().autoSelectMode == "ฟาร์มไก่เพชร" then
+		pcall(function() webhook() end)
+		while task.wait(5) do
+			local checkMAp = game:GetService("Workspace")._map:FindFirstChild("namek mushroom model")
+			local aceCheck = game:GetService("Players").LocalPlayer.PlayerGui.ResultsUI.Holder.LevelName			
+			if checkMAp then
+				if aceCheck == "Act 6 - The Purple Tyrant" then
+					if resultx == "VICTORY" then
+						getgenv().autoSelectMode = "ฟาร์มเพชร" 
+						updatejson()
+						game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
+					else
+						local a = { [1] = "replay" }
+						game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
+						game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
+						wait(99)
+					end
+				else
+					if resultx == "VICTORY" then
+						local args = {
+							[1] = "next_story"
+						}
+						game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(args))
+						game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(args))
+					else
+						local a = { [1] = "replay" }
+						game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
+						game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
+						wait(99)
+					end
+				end
+			else
+				getgenv().autoSelectMode = "ฟาร์มเพชร" 
+				updatejson()
+				game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
+			end
+		end
+		wait(99)
+	end
+
+end
 
 coroutine.resume(coroutine.create(function()
 	local GameFinished = game:GetService("Workspace"):WaitForChild("_DATA"):WaitForChild("GameFinished")
 	GameFinished:GetPropertyChangedSignal("Value"):Connect(function()
 		if GameFinished.Value == true then
-			print('Finight log 1')
-			wait(4)
-			print('Finight log 2')
-
-			--// Next Story --//
-			if getgenv().nextStoryauto then
-				pcall(function() webhook() end)
-				local servers = {}
-				local req = httprequest({Url = string.format("https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100", PlaceId)})
-				local body = HttpService:JSONDecode(req.Body)
-				if body and body.data then
-					for i, v in next, body.data do
-						if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and tonumber(v.playing) > 27 and v.id ~= JobId then
-							table.insert(servers, 1, v.id)
-						end 
-					end
-				end
-				if #servers > 0 then
-					game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceId, servers[math.random(1, #servers)], players.LocalPlayer)
-				else
-					game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
-				end
-				wait(99)
-			end
-			print('Finight log 3')
-
-			if getgenv().autostartStory then
-				pcall(function() webhook() end)
-				while task.wait(5) do
-					local args = {
-						[1] = "next_story"
-					}
-					game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(args))
-					
-				end
-				wait(99)
-			end
-			print('Finight log 4')
-
-			infTower_check = game:GetService("Players").LocalPlayer.PlayerGui.ResultsUI.Holder.LevelName.Text
-			infinityTower = infTower_check:split(": ")
-			if infinityTower[1] == "Infinity Castle" then
-				pcall(function() webhook() end)
-				game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_infinite_tower_from_game:InvokeServer()
-				wait(99)
-			end
-			print('Finight log 5')
-
-			--Portal
-			protal_check = game:GetService("Players").LocalPlayer.PlayerGui.ResultsUI.Holder.LevelName.Text
-			protalFram = protal_check:split(" ")
-			if protalFram[1] == "[Contract]" then
-				pcall(function() webhook_portal() end)
-				wait(1)
-				if getgenv().AutoLeave then
-					if getgenv().jobID ~= "" then
-						game:GetService("TeleportService"):TeleportToPlaceInstance(8304191830, getgenv().jobID,  game.Players.LocalPlayer)
-					else
-						game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
-					end
-				end
-				wait(99)
-			end
-			print('Finight log 6')
-
-			getgenv().disableatuofarm = true
-			repeat task.wait() until game:GetService("Players").LocalPlayer.PlayerGui.ResultsUI.Enabled == true
-			task.wait()
-			gems = tostring(game:GetService("Players").LocalPlayer.PlayerGui.ResultsUI.Holder.LevelRewards.ScrollingFrame.GemReward.Main.Amount.Text)
-			if gems == "+99999" then
-				gems = 0
-			end
-			print('Finight log 7')
-			getgenv().getgems = (getgenv().getgems - gems)
-			task.wait(1)
-			updatejson()
-			task.wait(2.1)
-			if getgenv().AutoLeave then
-				if dunjnew == true then
-					task.wait(2.1)
-					pcall(function() webhook() end)
-					if getgenv().jobID ~= "" then
-						game:GetService("TeleportService"):TeleportToPlaceInstance(8304191830, getgenv().jobID,  game.Players.LocalPlayer)
-					else
-						game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
-					end
-				end
-			end
-			print('Finight log 8')
-
-			if tonumber(getgenv().getgems) >= 1 then
-				if getgenv().AutoReplay then
-					task.wait(2.1)
-					pcall(function() webhook() end)
-					local a = { [1] = "replay" }
-					game:GetService("ReplicatedStorage").endpoints.client_to_server.set_game_finished_vote:InvokeServer(unpack(a))
-				elseif getgenv().AutoLeave then
-					task.wait(2.1)
-					pcall(function() webhook() end)
-					if getgenv().jobID ~= "" then
-						game:GetService("TeleportService"):TeleportToPlaceInstance(8304191830, getgenv().jobID,  game.Players.LocalPlayer)
-					else
-						game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
-					end
-				end
-			else
-				task.wait(1.5)
-				pcall(function() webhook() end)
-				task.wait(1.5)
-				pcall(function() webhook_finish() end)
-				getgenv().resultGems = 0
-				getgenv().autostart = false
-				updatejson()
-			end
+			gameisFinishAuto()
 		end
 	end)
+end))
+
+--#endregion
+
+-- [[ จบฟังชั่นจบเกมส์ ]] --
+--------------------------------------------------
+
+-- [[ ฟังชั่นทั่วไป ]] --
+
+--#region Lock FPS
+
+coroutine.resume(coroutine.create(function()
+	while task.wait() do
+		if getgenv().lockfps then
+			setfpscap(5)
+		else
+			setfpscap(15)
+		end
+	end
+end))
+
+--#endregion
+
+--#region Anti AFK
+
+coroutine.resume(coroutine.create(function()
+	while task.wait(60) do
+		pcall(function()
+			local vu = game:GetService("VirtualUser")
+			game:GetService("Players").LocalPlayer.Idled:connect(function()
+				vu:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+				wait(1)
+				vu:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+			end)
+		end)
+	end
+end))
+
+--#endregion
+
+--#region Teleport to Unit
+
+coroutine.resume(coroutine.create(function()
+	while task.wait() do
+		local _waitUnit = game:GetService("Workspace"):FindFirstChild("_UNITS")
+		local ckUnit = game:GetService("Workspace")["_UNITS"]:GetChildren()
+		if _waitUnit then
+			task.wait(3)
+			for _, v in pairs(ckUnit) do
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["_UNITS"][v.Name].HumanoidRootPart.CFrame * CFrame.new(0, 0, 1)
+				break
+			end
+		end
+		break
+	end
 end))
 
 --#endregion
@@ -4420,1140 +4394,75 @@ end))
 
 --#endregion
 
---#region BUY BULMA
-
-coroutine.resume(coroutine.create(function()
-	while task.wait(5) do
-		-- BUYER 1
-		if game.PlaceId == 8304191830 then
-			pcall(function()
-        if getgenv().Buyer1 == "Star Fruit" then
-          local lo_buy = game:GetService("Workspace")["travelling_merchant"].stand.items:GetChildren()
-          for i , v in pairs(lo_buy) do
-            s = tostring(v.Name)
-            x = string.sub(s,1,9)
-            if x == "StarFruit" then
-              local args = {
-                [1] = tostring(v.Name)
-              }
-              game:GetService("ReplicatedStorage").endpoints.client_to_server.buy_travelling_merchant_item:InvokeServer(unpack(args))
-            end
-          end
-        elseif getgenv().Buyer1 == "Summon Ticket" then
-          local lo_buy = game:GetService("Workspace")["travelling_merchant"].stand.items:GetChildren()
-          for i , v in pairs(lo_buy) do
-            s = tostring(v.Name)
-            x = string.sub(s,1,13)
-            if x == "summon_ticket" then
-              local args = {
-                [1] = tostring(v.Name)
-              }
-              game:GetService("ReplicatedStorage").endpoints.client_to_server.buy_travelling_merchant_item:InvokeServer(unpack(args))
-            end
-          end
-        elseif getgenv().Buyer1 == "Lucky Postion" then
-          local lo_buy = game:GetService("Workspace")["travelling_merchant"].stand.items:GetChildren()
-          for i , v in pairs(lo_buy) do
-            s = tostring(v.Name)
-            x = string.sub(s,1,10)
-            if x == "LuckPotion" then
-              local args = {
-                [1] = tostring(v.Name)
-              }
-              game:GetService("ReplicatedStorage").endpoints.client_to_server.buy_travelling_merchant_item:InvokeServer(unpack(args))
-            end
-          end
-        elseif getgenv().Buyer1 == "Star Remanent" then
-          local lo_buy = game:GetService("Workspace")["travelling_merchant"].stand.items:GetChildren()
-          for i , v in pairs(lo_buy) do					
-            s = tostring(v.Name)
-            x = string.sub(s,1,12)
-            if x == "star_remnant" then
-              local args = {
-                [1] = tostring(v.Name)
-              }
-              game:GetService("ReplicatedStorage").endpoints.client_to_server.buy_travelling_merchant_item:InvokeServer(unpack(args))
-            end
-          end
-        end
-        
-        --- BUYER 2
-        if getgenv().Buyer2 == "Star Fruit" then
-          local lo_buy = game:GetService("Workspace")["travelling_merchant"].stand.items:GetChildren()
-          for i , v in pairs(lo_buy) do
-            s = tostring(v.Name)
-            x = string.sub(s,1,9)
-            if x == "StarFruit" then
-              local args = {
-                [1] = tostring(v.Name)
-              }
-              game:GetService("ReplicatedStorage").endpoints.client_to_server.buy_travelling_merchant_item:InvokeServer(unpack(args))
-            end
-          end
-        elseif getgenv().Buyer2 == "Summon Ticket" then
-          local lo_buy = game:GetService("Workspace")["travelling_merchant"].stand.items:GetChildren()
-          for i , v in pairs(lo_buy) do
-            s = tostring(v.Name)
-            x = string.sub(s,1,13)
-            if x == "summon_ticket" then
-              local args = {
-                [1] = tostring(v.Name)
-              }
-              game:GetService("ReplicatedStorage").endpoints.client_to_server.buy_travelling_merchant_item:InvokeServer(unpack(args))
-            end
-          end
-        elseif getgenv().Buyer2 == "Lucky Postion" then
-          local lo_buy = game:GetService("Workspace")["travelling_merchant"].stand.items:GetChildren()
-          for i , v in pairs(lo_buy) do
-            s = tostring(v.Name)
-            x = string.sub(s,1,10)
-            if x == "LuckPotion" then
-              local args = {
-                [1] = tostring(v.Name)
-              }
-              game:GetService("ReplicatedStorage").endpoints.client_to_server.buy_travelling_merchant_item:InvokeServer(unpack(args))
-            end
-          end
-        elseif getgenv().Buyer2 == "Star Remanent" then
-          local lo_buy = game:GetService("Workspace")["travelling_merchant"].stand.items:GetChildren()
-          for i , v in pairs(lo_buy) do
-            
-            s = tostring(v.Name)
-            x = string.sub(s,1,12)
-            
-            if x == "star_remnant" then
-              local args = {
-                [1] = tostring(v.Name)
-              }
-              game:GetService("ReplicatedStorage").endpoints.client_to_server.buy_travelling_merchant_item:InvokeServer(unpack(args))
-            end
-          end
-        end
-        ---- BUYER 3
-        if getgenv().Buyer3 == "Star Fruit" then
-          local lo_buy = game:GetService("Workspace")["travelling_merchant"].stand.items:GetChildren()
-          for i , v in pairs(lo_buy) do
-            s = tostring(v.Name)
-            x = string.sub(s,1,9)
-            if x == "StarFruit" then
-              local args = {
-                [1] = tostring(v.Name)
-              }
-              game:GetService("ReplicatedStorage").endpoints.client_to_server.buy_travelling_merchant_item:InvokeServer(unpack(args))
-            end
-          end
-        elseif getgenv().Buyer3 == "Summon Ticket" then
-          local lo_buy = game:GetService("Workspace")["travelling_merchant"].stand.items:GetChildren()
-          for i , v in pairs(lo_buy) do
-            s = tostring(v.Name)
-            x = string.sub(s,1,13)
-            if x == "summon_ticket" then
-              local args = {
-                [1] = tostring(v.Name)
-              }
-              game:GetService("ReplicatedStorage").endpoints.client_to_server.buy_travelling_merchant_item:InvokeServer(unpack(args))
-            end
-          end
-        elseif getgenv().Buyer3 == "Lucky Postion" then
-          local lo_buy = game:GetService("Workspace")["travelling_merchant"].stand.items:GetChildren()
-          for i , v in pairs(lo_buy) do
-            s = tostring(v.Name)
-            x = string.sub(s,1,10)
-            if x == "LuckPotion" then
-              local args = {
-                [1] = tostring(v.Name)
-              }
-              game:GetService("ReplicatedStorage").endpoints.client_to_server.buy_travelling_merchant_item:InvokeServer(unpack(args))
-            end
-          end
-        elseif getgenv().Buyer3 == "Star Remanent" then
-          local lo_buy = game:GetService("Workspace")["travelling_merchant"].stand.items:GetChildren()
-          for i , v in pairs(lo_buy) do
-            
-            s = tostring(v.Name)
-            x = string.sub(s,1,12)
-            
-            if x == "star_remnant" then
-              local args = {
-                [1] = tostring(v.Name)
-              }
-              game:GetService("ReplicatedStorage").endpoints.client_to_server.buy_travelling_merchant_item:InvokeServer(unpack(args))
-            end
-          end
-        end
-      end)
-			task.wait(60)
-		end
-	end
-end))
-
---#endregion
-
---#region Auto Upgrade
-
-coroutine.resume(coroutine.create(function()
-	while task.wait(0) do
-		if getgenv().autoupgrade then
-			local _wave = game:GetService("Workspace"):WaitForChild("_wave_num")
-			if _wave.Value >= 6 then
-				pcall(function() --///
-					repeat task.wait() until game:GetService("Workspace"):WaitForChild("_UNITS")
-					for i, v in ipairs(game:GetService("Workspace")["_UNITS"]:GetChildren()) do
-						if v:FindFirstChild("_stats") then
-							if tostring(v["_stats"].player.Value) == game.Players.LocalPlayer.Name and v["_stats"].xp.Value >= 0 then
-								if v.Name == "wendy" or v.Name == "wendy:shiny" or v.Name == "sakura" then
-									-- print(v.Name)
-								else
-									game:GetService("ReplicatedStorage").endpoints.client_to_server.upgrade_unit_ingame:InvokeServer(v)
-								end
-							end
-						end
-					end
-				end)
-			end
-		end
-	end
-end))
-
---#endregion 
-
---#region Teleport in Wave
+--#region setting Hidden Error
 
 coroutine.resume(coroutine.create(function()
 	while task.wait() do
 		if game.PlaceId ~= 8304191830 then
-			local _wave = game:GetService("Workspace"):WaitForChild("_wave_num")
-			if getgenv().waveteleport  and tonumber(getgenv().sellatwave) <= _wave.Value then
-				pcall(function ()
-					gems = tostring(game:GetService("Players").LocalPlayer.PlayerGui.Waves.HealthBar.IngameRewards.GemRewardTotal.Holder.Main.Amount.Text)
-					getgenv().getgems = (getgenv().getgems - gems)
-					task.wait(1)
-					updatejson()
-				end)
-				pcall(function() webhook() end)
-				if tonumber(getgenv().getgems) <= 1 then
-					getgenv().autostart = false
-					autostart = false
-					updatejson()
-					pcall(function() webhook_finish() end)
-				end
-				if getgenv().jobID ~= "" then
-					game:GetService("TeleportService"):TeleportToPlaceInstance(8304191830, getgenv().jobID,  game.Players.LocalPlayer)
-				else
-					game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
-				end
-			end
-
-			if getgenv().autosell and tonumber(getgenv().sellatwave) <= _wave.Value then
-				getgenv().disableatuofarm = true
-				repeat task.wait() until game:GetService("Workspace"):WaitForChild("_UNITS")
-				for i, v in ipairs(game:GetService("Workspace")["_UNITS"]:GetChildren()) do
-					repeat task.wait() until v:WaitForChild("_stats")
-					if tostring(v["_stats"].player.Value) == game.Players.LocalPlayer.Name then
-						repeat task.wait() until v:WaitForChild("_stats"):WaitForChild("upgrade")
-						game:GetService("ReplicatedStorage").endpoints.client_to_server.sell_unit_ingame:InvokeServer(v)
-					end
-				end
-			end
-		end
-	end
-end))
-
---#endregion
-
---#region Auto Timeset
-
-coroutine.resume(coroutine.create(function()
-	while task.wait() do
-    if game.PlaceId ~= 8304191830 then
-      local _wave = game:GetService("Workspace"):WaitForChild("_wave_num")
-      --raiD_check = GetCurrentLevelName()
-      --myRaid = raiD_check:split(": ")
-      if getgenv().takeTimeRaid then
-        if _wave.Value == 1 then
-          getgenv().takeTime = 0.4
-          while task.wait(10) do
-            if _wave.Value == 10 then
-              getgenv().takeTime = 1.2
-              while task.wait(10) do
-                if _wave.Value == 15 then
-                  getgenv().takeTime = 0.4
-                  break
-                end
-              end
-              break
-            end
-          end
-          break
-        end
-      end
-    end
-	end
-end))
---#endregion
-
---#region Lock FPS
-
-function low_cpu()
-  if not setfpscap then
-    return
-  end
-  UserInputService.WindowFocusReleased:Connect(function()
-    setfpscap(5)
-  end)
-  UserInputService.WindowFocused:Connect(function()
-    setfpscap(30)
-  end)
-end
-coroutine.resume(coroutine.create(function()
-	while task.wait() do
-		if openlockfps == true then
-			--setfpscap(getgenv().lockfps)
-			low_cpu()
-		end
-		if openlockfps == false then
-			setfpscap(30)
-		end
-	end
-end))
-
---#endregion
-
---#region All Dunject
-
-----------Dunject New ---------------
-coroutine.resume(coroutine.create(function()
-	dunjnew_check = true
-	while task.wait() do
-		if dunjnew == true then
-			if dunjnew_check == true then
-				dunjnew_check = false
-				game:GetService("StarterGui"):SetCore("SendNotification", {
-					Title = "กำลังเข้าสู่ดันเจี้ยน..!", -- Required
-					Text = "โปรดรอสักครู่ เพื่อเข้าสู่ขั้นตอนต่อไป..!", -- Required
-					Icon = "rbxassetid://4384403532", -- Optional
-				})
-				task.wait(2)
-				local args = {
-					[1] = "_lobbytemplatemaps25",
-				}
-				game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer(unpack(args))
-			end
-		end
-	end
-end))
-----------Dunject 1 ---------------
-coroutine.resume(coroutine.create(function()
-	dun1_check = true
-	while task.wait() do
-		if dunj1 == true then
-			if dun1_check == true then
-				dun1_check = false
-				game:GetService("StarterGui"):SetCore("SendNotification", {
-					Title = "กำลังเข้าสู่ดันเจี้ยน..!", -- Required
-					Text = "โปรดรอสักครู่ เพื่อเข้าสู่ขั้นตอนต่อไป..!", -- Required
-					Icon = "rbxassetid://4384403532", -- Optional
-				})
-				task.wait(2)
-				local args = {
-					[1] = tostring(map_dun1),
-					[2] = {
-						["selected_key"] = tostring(key_dun1),
-					},
-				}
-
-				game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer(unpack(args))
-			end
-		end
-	end
-end))
-----------Dunject 2 ---------------
-coroutine.resume(coroutine.create(function()
-	dun2_check = true
-	while task.wait() do
-		if dunj2 == true then
-			if dun2_check == true then
-				dun2_check = false
-				game:GetService("StarterGui"):SetCore("SendNotification", {
-					Title = "กำลังเข้าสู่ดันเจี้ยน..!", -- Required
-					Text = "โปรดรอสักครู่ เพื่อเข้าสู่ขั้นตอนต่อไป..!", -- Required
-					Icon = "rbxassetid://4384403532", -- Optional
-				})
-				task.wait(2)
-				local args = {
-					[1] = tostring(map_dun2),
-					[2] = {
-						["selected_key"] = tostring(key_dun2),
-					},
-				}
-
-				game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer(unpack(args))
-			end
-		end
-	end
-end))
-----------Dunject 3 ---------------
-coroutine.resume(coroutine.create(function()
-	dun3_check = true
-	while task.wait() do
-		if dunj3 == true then
-			if dun3_check == true then
-				dun3_check = false
-				game:GetService("StarterGui"):SetCore("SendNotification", {
-					Title = "กำลังเข้าสู่ดันเจี้ยน..!", -- Required
-					Text = "โปรดรอสักครู่ เพื่อเข้าสู่ขั้นตอนต่อไป..!", -- Required
-					Icon = "rbxassetid://4384403532", -- Optional
-				})
-				task.wait(2)
-				local args = {
-					[1] = tostring(map_dun3),
-					[2] = {
-						["selected_key"] = tostring(key_dun3),
-					},
-				}
-
-				game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer(unpack(args))
-			end
-		end
-	end
-end))
-
---#endregion
-
---#region Anti AFK
-
-coroutine.resume(coroutine.create(function()
-	while task.wait(60) do
-		if antiafk == false then
-			break
-		end
-		if antiafk == true then
-			pcall(function()
-				local vu = game:GetService("VirtualUser")
-				game:GetService("Players").LocalPlayer.Idled:connect(function()
-					vu:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
-					wait(1)
-					vu:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
-				end)
-			end)
-		end
-	end
-end))
-
---#endregion
-
---#region Auto Check Gemes```````
-
-coroutine.resume(coroutine.create(function()
-	while task.wait() do
-		if getgenv().autogems then
-			if tonumber(getgenv().getgems) >= 1 then
-				getgenv().AutoFarm = true
-				getgenv().autogems = true
-			else
-				getgenv().AutoFarm = false
-				getgenv().autogems = false
-			end
-		end
-	end
-end))
-
---#endregion
-
---#region Auto Abilities
-getgenv().autoabilityerr = false
-function autoabilityfunc()
-	pcall(function() --///
-		repeat task.wait() until game:GetService("Workspace"):WaitForChild("_UNITS")
-		for i, v in ipairs(game:GetService("Workspace")["_UNITS"]:GetChildren()) do
-			if v:FindFirstChild("_stats") then
-				if v._stats:FindFirstChild("player") and v._stats:FindFirstChild("xp") then
-					if v.Name == "ichigo_mugetsu_evolved" or v.Name == "ichigo_mugetsu" then
-						print('ichigo')
-					elseif v.Name == "gojo_evolved" or v.Name == "kisuke_evolved" then
-						game:GetService("ReplicatedStorage").endpoints.client_to_server.use_active_attack:InvokeServer(v)
-					elseif v.Name == "wendy" or v.Name == "erwin" then
-						game:GetService("ReplicatedStorage").endpoints.client_to_server.use_active_attack:InvokeServer(v)
-						task.wait(11)
-					end
-				end
-			end
-		end
-	end)
-end
-coroutine.resume(coroutine.create(function()
-	while task.wait(2) do
-		if getgenv().autoabilities then
-			if game.PlaceId ~= 8304191830 then
-				pcall(function()
-					autoabilityfunc()
-				end)
-			end
-			if getgenv().autoabilityerr == true then
-				task.wait()
-				autoabilityfunc()
-				getgenv().autoabilityerr = false
-			end
-		end
-	end
-end))
---#endregion
-
---#region Auto Start loop
-getgenv().teleporting = true
-local function checkChallenge()
-	for i, v in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
-		if v:IsA("SurfaceGui") then
-			if v:FindFirstChild("ChallengeCleared") then
-				return v.ChallengeCleared.Visible
-			end
-		end
-	end
-end
-local function checkReward()
-	if checkChallenge() == false then
-		if getgenv().selectedreward == game:GetService("Workspace")["_LOBBIES"]["_DATA"]["_CHALLENGE"]["current_reward"].Value then
-			return true
-		elseif getgenv().AutoChallengeAll then
-			return true
-		else
-			return false
-		end
-	else
-		return false
-	end
-end
---#endregion
-
---#region Teleport to Friends
-
-coroutine.resume(coroutine.create(function()
-	while task.wait(5) do
-		if game.PlaceId == 8304191830 then
-			if getgenv().warpfriend then
-				local nameList = listFriends()
-				for _, f_name in pairs(nameList) do
-					for _, v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetChildren()) do
-							checkOwner = tostring(game:GetService("Workspace")["_LOBBIES"].Story[v.Name].Owner.Value)
-							if checkOwner == tostring(f_name) then
-								game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["_LOBBIES"].Story[v.Name].Door.CFrame * CFrame.new(0, 0, 1)
-								task.wait(3)
-							end
-					end
-					for _, v in pairs(game:GetService("Workspace")["_RAID"].Raid:GetChildren()) do
-						checkOwner = tostring(game:GetService("Workspace")["_RAID"].Raid[v.Name].Owner.Value)
-						if checkOwner == tostring(f_name) then
-							task.wait(3)
-							game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["_RAID"].Raid[v.Name].Door.CFrame * CFrame.new(0, 0, 1)
-						end
-					end
-				end
-			end
-		end
-	end
-end))
-
---#endregion
-
---#region Function farming
-
-local function startfarming()
-	if getgenv().autostart and getgenv().teleporting and getgenv().AutoFarmTP == false and getgenv().AutoFarmIC == false then
-		if game.PlaceId == 8304191830 then
-			local cpos = plr.Character.HumanoidRootPart.CFrame
-			if tostring(Workspace._LOBBIES.Story[getgenv().door].Owner.Value) ~= plr.Name then
-				for i, v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetDescendants()) do
-					if v.Name == "Owner" and v.Value == nil then
-						local args = {
-							[1] = tostring(v.Parent.Name),
-						}
-						game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer(unpack(args))
-						task.wait()
-						if getgenv().level:match("infinite") then
-							local args = {
-								[1] = tostring(v.Parent.Name), -- Lobby
-								[2] = getgenv().level, -- World
-								[3] = getgenv().friendOnly, -- Friends Only or not
-								[4] = "Hard",
-							}
-							game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(unpack(args))
-						else
-							local args = {
-								[1] = tostring(v.Parent.Name), -- Lobby
-								[2] = getgenv().level, -- World
-								[3] = getgenv().friendOnly, -- Friends Only or not
-								[4] = getgenv().difficulty,
-							}
-							game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(unpack(args))
-						end
-						task.wait(55)
-						local args = {
-							[1] = tostring(v.Parent.Name),
-						}
-						game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
-						getgenv().door = v.Parent.Name
-						plr.Character.HumanoidRootPart.CFrame = v.Parent.Door.CFrame
-						break
-					end
-				end
-			end
-
-			task.wait()
-
-			plr.Character.HumanoidRootPart.CFrame = cpos
-			if tonumber(getgenv().getgems) >= 1 then
-				if Workspace._LOBBIES.Story[getgenv().door].Owner == plr.Name then
-					if Workspace._LOBBIES.Story[getgenv().door].Teleporting.Value == true then
-						getgenv().teleporting = false
-					else
-						getgenv().teleporting = true
-					end
-				end
-				--warn("farming")
-				task.wait(3)
-			else
-				wait(1)
-			end
-		end
-	elseif getgenv().autostart and getgenv().AutoFarm and getgenv().teleporting and getgenv().AutoFarmTP == false and getgenv().AutoFarmIC == false and getgenv().farmprotal or getgenv().farmprotal then
-		--ipairs(game:GetService("ReplicatedStorage")["_FX_CACHE"]:GetChildren())
-    print('Find Portal')
-		for i, v in ipairs(game:GetService("ReplicatedStorage")["_FX_CACHE"]:GetChildren()) do
-			if getgenv().portalnameX == "One Punch Man" then
-				if v.Name == "portal_boros_g" then
-					getgenv().PortalID = v._uuid_or_id.value
-					break
-				end
-      elseif getgenv().portalnameX == "Demon Leaders" then
-        if v.Name == "portal_zeldris" then
-					getgenv().PortalID = v._uuid_or_id.value
-					break
-				end
-			elseif getgenv().portalnameX == "Demon Academy" then
-        if v.Name == "april_portal_item" then
-					getgenv().PortalID = v._uuid_or_id.value
-					break
-				end
-			elseif getgenv().portalnameX ~= "One Punch Man" and v.Name == "portal_csm" or v.Name == "portal_csm1" or v.Name == "portal_csm2" or v.Name == "portal_csm3" or v.Name == "portal_csm4" or v.Name == "portal_csm5" then
-				getgenv().PortalID = v._uuid_or_id.value
-				break
-			end
-		end
-		task.wait(5)
-
-		local args = {
-			[1] = tostring(getgenv().PortalID),
-			[2] = {
-				["friends_only"] = false,
-			},
-		}
-
-		game:GetService("ReplicatedStorage").endpoints.client_to_server.use_portal:InvokeServer(unpack(args))
-
-		task.wait(45)
-
-		for i, v in pairs(game:GetService("Workspace")["_PORTALS"].Lobbies:GetDescendants()) do
-			if v.Name == "Owner" then
-				if tostring(v.value) == game.Players.LocalPlayer.Name then
-					local args = {
-						[1] = tostring(v.Parent.Name),
-					}
-					game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
-					break
-				end
-			end
-		end
-		task.wait(7)
-	end
-end
-
-tp_check = true
-local function startfarming_Story()
-	if getgenv().autostartStory and getgenv().teleporting and getgenv().AutoFarmTP == false and getgenv().AutoFarmIC == false then
-		if game.PlaceId == 8304191830 then
-			local cpos = plr.Character.HumanoidRootPart.CFrame
-			if tp_check then
-				for i, v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetChildren()) do
-					check_door = tostring(game:GetService("Workspace")["_LOBBIES"].Story[v.Name].Owner.Value)
-					if check_door == "nil"  then
-						game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["_LOBBIES"].Story[v.Name].Door.CFrame * CFrame.new(0, 0, 1)
-						wait(1)
-						if getgenv().autostartStory then
-							broke = false
-							for g, j in ipairs(game:GetService("Players").LocalPlayer.PlayerGui.LevelSelectGui.MapSelect.Main.Wrapper.Container :GetChildren()) do
-								if j:IsA("ImageButton") then
-									if j.Name == "ComingSoon" then
-										
-									else
-										local ClearStory = j.Main.Container.LevelsCleared:GetChildren()
-										for l, s in pairs(ClearStory) do
-											if s.Name == "V" then
-												chLevel = s.Text
-												waves = chLevel:split("/")
-												if waves[1] == "6" then
-													wait(1)
-												else
-													
-													st_farm = j.Name .. "_level_" .. waves[1] + 1
-													broke = true
-													wait(1)
-													local args = {
-														[1] = tostring(v.Name), -- Lobby
-														[2] = tostring(st_farm), -- World
-														[3] = getgenv().friendOnly, -- Friends Only or not
-														[4] = "Normal",
-													}
-													game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(unpack(args))
-													task.wait(13)
-													local args = {
-														[1] = tostring(v.Name),
-													}
-													game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
-													break
-												end
-											end
-										end
-									end
-								end
-								if broke then
-									break
-								end
-							end
-						end
-						tp_check = false
-						break
-					end
-				end
-			end
-			wait(2)
-		end
-	end
-end
-
-local function startChallenge()
-	if game.PlaceId == 8304191830 then
-		local cpos = plr.Character.HumanoidRootPart.CFrame
-
-		if getgenv().AutoChallenge and getgenv().autostart and getgenv().AutoFarm and checkReward() == true then
-			for i, v in pairs(game:GetService("Workspace")["_CHALLENGES"].Challenges:GetDescendants()) do
-				if v.Name == "Owner" and v.Value == nil then
-					
-					local args = {
-						[1] = tostring(v.Parent.Name),
-					}
-					game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby
-						:InvokeServer(unpack(args))
-
-					getgenv().chdoor = v.Parent.Name
-					break
-				end
-			end
-			task.wait()
-			plr.Character.HumanoidRootPart.CFrame = cpos
-		end
-	end
-end
-
-local function startChallenge_dally()
-	for i, v in pairs(game:GetService("Workspace")["_CHALLENGES"].DailyChallenge:GetDescendants()) do
-		if v.Name == "Owner" and v.Value == nil then
-			
+			--// Disble Error in game
+			game.Players.LocalPlayer.PlayerGui.MessageGui.Enabled = false
+			game:GetService("ReplicatedStorage").packages.assets["ui_sfx"].error.Volume = 0
+			game:GetService("ReplicatedStorage").packages.assets["ui_sfx"].error_old.Volume = 0
+			--// AUTO SETTING LOW POLYGON
 			local args = {
-				--[1] = "_lobbytemplate319"
-				[1] = tostring(v.Parent.Name),
+					[1] = "low_quality",
+					[2] = true
 			}
-			game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer(unpack(args))
-
-			getgenv().chdoor = v.Parent.Name
-			break
-		end
-	end
-	task.wait()
-end
-
-coroutine.resume(coroutine.create(function()
-	while task.wait() do
-		if getgenv().AutoFarmIC == false and getgenv().AutoFarmTP == false then
-			if checkChallenge() == false then --challenge is not cleared
-				if getgenv().AutoChallenge and checkReward() == true then
-					startChallenge() --start challenge
-				else
-					startfarming() --regular farming
-				end
-			elseif checkChallenge() == true then
-				startfarming() --regular farming
-			end
-		end
-	end
-end))
-
-coroutine.resume(coroutine.create(function()
-	while task.wait() do
-		if getgenv().autostartStory then
-			wait(3)
-			local checkmatch = game:GetService("Workspace"):FindFirstChild("_PORTALS")
-			if checkmatch then
-				startfarming_Story()
-				wait(62)
-			end
-			--break
-		end
-	end
-end))
-
---#endregion
-
---#region SelectUnit
-
-coroutine.resume(coroutine.create(function()
-  if game.PlaceId == 8304191830 then
-    handle_select_units()
-    local collection = plr.PlayerGui:WaitForChild("collection")
-    collection:GetPropertyChangedSignal("Enabled"):Connect(function()
-      if collection.Enabled == false then
-        handle_select_units()
-      end
-    end)
-  end
-end))
---#endregion
-
---#region fram castle
-
-local function FarmCastlePark()
-	if getgenv().AutoFarmIC and getgenv().AutoFarm then
-		if game.PlaceId == 8304191830 then
-			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new( 12423.1855, 155.24025, 3198.07593, -1.34111269e-06, -2.02512282e-08, 1, 3.91705386e-13, 1, 2.02512282e-08, -1, 4.18864542e-13, -1.34111269e-06 )
-			getgenv().infinityroom = 0
-			for i, v in pairs( game:GetService("Players")[game.Players.LocalPlayer.Name].PlayerGui.InfiniteTowerUI.LevelSelect.InfoFrame.LevelButtons :GetChildren() ) do
-				if v.Name == "FloorButton" then
-					if v.clear.Visible == false and v.Locked.Visible == false then
-						local room = string.split(v.Main.text.Text, " ")
-
-						local args = {
-							[1] = tonumber(room[2]),
-						}
-
-						game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_infinite_tower :InvokeServer(unpack(args))
-						getgenv().infinityroom = tonumber(room[2])
-						break
-					end
-				end
-			end
-			task.wait(6)
-		end
-	elseif getgenv().AutoFarmTP and getgenv().AutoFarm then
-		if game.PlaceId == 8304191830 then
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.toggle_setting:InvokeServer(unpack(args))
 			local args = {
-				[1] = "_lobbytemplate_event330",
+					[1] = "disable_kill_fx",
+					[2] = true
 			}
-			game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby :InvokeServer(unpack(args))
-			task.wait(5)
-		end
-	end
-end
-
-coroutine.resume(coroutine.create(function()
-	while task.wait() do
-		if checkChallenge() == false then --challenge is not cleared
-			if getgenv().AutoChallenge and checkReward() == true then
-				startChallenge() --start challenge
-			else
-				FarmCastlePark() --regular farming
-			end
-		elseif checkChallenge() == true then
-			FarmCastlePark() --regular farming
-		end
-	end
-end))
---#endregion
-
---#region RAID MAPS 
-
---RAID Entertainment
-coroutine.resume(coroutine.create(function()
-	while task.wait() do
-		if game.PlaceId == 8304191830 then
-			if getgenv().raid_entertainment ~= "เลือกด่านที่ต้องการฟาร์ม" and getgenv().raid_entertainment ~= nil  then
-				pcall(function()
-					for i, v in pairs(game:GetService("Workspace")["_RAID"].Raid:GetChildren()) do
-						check_door = tostring(game:GetService("Workspace")["_RAID"].Raid[v.Name].Locked.Value)
-						if check_door == "false" then
-							game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["_RAID"].Raid[v.Name].Door.CFrame * CFrame.new(0, 0, 1)
-							wait(1)
-							local args = {
-								[1] = tostring(v.Name),
-								[2] = getgenv().raid_entertainment,
-								[3] = getgenv().friendOnly,
-								[4] = "Hard",
-							}
-							game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(unpack(args))
-							task.wait(55)
-							local args = {
-								[1] = tostring(v.Name),
-							}
-							game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
-							break
-						end
-					end
-				end)
-			end
-		end
-	end
-end))
---RAID UCHIHA
-coroutine.resume(coroutine.create(function()
-	while task.wait() do
-		if game.PlaceId == 8304191830 then
-			if getgenv().raid_strom ~= "เลือกด่านที่ต้องการฟาร์ม" and getgenv().raid_strom ~= nil  then
-				pcall(function()
-					for i, v in pairs(game:GetService("Workspace")["_RAID"].Raid:GetChildren()) do
-						check_door = tostring(game:GetService("Workspace")["_RAID"].Raid[v.Name].Locked.Value)
-						if check_door == "false" then
-							game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["_RAID"].Raid[v.Name].Door.CFrame * CFrame.new(0, 0, 1)
-							wait(1)
-							local args = {
-								[1] = tostring(v.Name),
-								[2] = getgenv().raid_strom,
-								[3] = getgenv().friendOnly,
-								[4] = "Hard",
-							}
-							game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(unpack(args))
-							task.wait(55)
-							local args = {
-								[1] = tostring(v.Name),
-							}
-							game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
-							break
-						end
-					end
-				end)
-			end
-		end
-	end
-end))
---RAID Freeze
-coroutine.resume(coroutine.create(function()
-	while task.wait() do
-		if game.PlaceId == 8304191830 then
-			if getgenv().raid_freeze ~= "เลือกด่านที่ต้องการฟาร์ม" and getgenv().raid_freeze ~= nil then
-				pcall(function()
-					for i, v in pairs(game:GetService("Workspace")["_RAID"].Raid:GetChildren()) do
-						check_door = tostring(game:GetService("Workspace")["_RAID"].Raid[v.Name].Locked.Value)
-						if check_door == "false" then
-							game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["_RAID"].Raid[v.Name].Door.CFrame * CFrame.new(0, 0, 1)
-							wait(1)
-							local args = {
-								[1] = tostring(v.Name),
-								[2] = getgenv().raid_freeze,
-								[3] = getgenv().friendOnly,
-								[4] = "Hard",
-							}
-							game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(unpack(args))
-							task.wait(55)
-							local args = {
-								[1] = tostring(v.Name),
-							}
-							game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
-							break
-						end
-					end
-				end)
-			end
-		end
-	end
-end))
---RAID WEST CITY
-coroutine.resume(coroutine.create(function()
-	while task.wait() do
-		if game.PlaceId == 8304191830 then
-			if getgenv().westCity ~= "เลือกด่านที่ต้องการฟาร์ม" and getgenv().westCity ~= nil  then
-				pcall(function()
-					for i, v in pairs(game:GetService("Workspace")["_RAID"].Raid:GetChildren()) do
-						check_door = tostring(game:GetService("Workspace")["_RAID"].Raid[v.Name].Locked.Value)
-						if check_door == "false" then
-							game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["_RAID"].Raid[v.Name].Door.CFrame * CFrame.new(0, 0, 1)
-							wait(4)
-							local args = {
-								[1] = tostring(v.Name),
-								[2] = getgenv().westCity,
-								[3] = getgenv().friendOnly,
-								[4] = "Hard",
-							}
-							game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(unpack(args))
-							task.wait(55)
-							local args = {
-								[1] = tostring(v.Name),
-							}
-							game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
-							break
-						end
-					end
-				end)
-			end
-		end
-	end
-end))
---RAID TRAIN
-coroutine.resume(coroutine.create(function()
-	while task.wait() do
-		if game.PlaceId == 8304191830 then
-			if getgenv().demonSlayer ~= "เลือกด่านที่ต้องการฟาร์ม" and getgenv().demonSlayer ~= nil  then
-
-				pcall(function()
-					for i, v in pairs(game:GetService("Workspace")["_RAID"].Raid:GetChildren()) do
-						check_door = tostring(game:GetService("Workspace")["_RAID"].Raid[v.Name].Locked.Value)
-						if check_door == "false" then
-							game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["_RAID"].Raid[v.Name].Door.CFrame
-								* CFrame.new(0, 0, 1)
-							wait(1)
-							local args = {
-								[1] = tostring(v.Name),
-								[2] = getgenv().demonSlayer,
-								[3] = getgenv().friendOnly,
-								[4] = "Hard",
-							}
-							game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(unpack(args))
-							task.wait(55)
-							local args = {
-								[1] = tostring(v.Name),
-							}
-							game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
-							break
-						end
-					end
-				end)
-			end
-		end
-	end
-end))
---RAID AOT
-coroutine.resume(coroutine.create(function()
-	while task.wait() do
-		if game.PlaceId == 8304191830 then
-			if getgenv().aotRaid ~= "เลือกด่านที่ต้องการฟาร์ม" and getgenv().aotRaid ~= nil  then
-				pcall(function()
-					for i, v in pairs(game:GetService("Workspace")["_RAID"].Raid:GetChildren()) do
-						check_door = tostring(game:GetService("Workspace")["_RAID"].Raid[v.Name].Locked.Value)
-						if check_door == "false" then
-							game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["_RAID"].Raid[v.Name].Door.CFrame
-								* CFrame.new(0, 0, 1)
-							wait(1)
-							local args = {
-								[1] = tostring(v.Name),
-								[2] = getgenv().aotRaid,
-								[3] = getgenv().friendOnly,
-								[4] = "Hard",
-							}
-							game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(unpack(args))
-							task.wait(55)
-							local args = {
-								[1] = tostring(v.Name),
-							}
-							game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
-							break
-						end
-					end
-				end)
-			end
-		end
-	end
-end))
---RAID SAND
-coroutine.resume(coroutine.create(function()
-	while task.wait() do
-		if game.PlaceId == 8304191830 then
-			if getgenv().SendVilla ~= "เลือกด่านที่ต้องการฟาร์ม" and getgenv().SendVilla ~= nil  then
-
-				pcall(function()
-					for i, v in pairs(game:GetService("Workspace")["_RAID"].Raid:GetChildren()) do
-						check_door = tostring(game:GetService("Workspace")["_RAID"].Raid[v.Name].Locked.Value)
-						if check_door == "false" then
-							game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["_RAID"].Raid[v.Name].Door.CFrame
-								* CFrame.new(0, 0, 1)
-							wait(1)
-							local args = {
-								[1] = tostring(v.Name),
-								[2] = getgenv().SendVilla,
-								[3] = getgenv().friendOnly,
-								[4] = "Hard",
-							}
-							game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(unpack(args))
-							wait(55)
-							local args = {
-								[1] = tostring(v.Name),
-							}
-							game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(unpack(args))
-							break
-						end
-					end
-				end)
-			end
-		end
-	end
-end))
---#endregion
-
---#region Teleport to Unit
-
-coroutine.resume(coroutine.create(function()
-	while task.wait() do
-		local _waitUnit = game:GetService("Workspace"):FindFirstChild("_UNITS")
-		local ckUnit = game:GetService("Workspace")["_UNITS"]:GetChildren()
-		if _waitUnit then
-			task.wait(3)
-			for _, v in pairs(ckUnit) do
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["_UNITS"][v.Name].HumanoidRootPart.CFrame * CFrame.new(0, 0, 1)
-				break
-			end
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.toggle_setting:InvokeServer(unpack(args))
+			local args = {
+					[1] = "disable_other_fx",
+					[2] = true
+			}
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.toggle_setting:InvokeServer(unpack(args))
+			local args = {
+					[1] = "disable_effects",
+					[2] = true
+			}
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.toggle_setting:InvokeServer(unpack(args))
+			local args = {
+					[1] = "low_quality_shadows",
+					[2] = true
+			}
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.toggle_setting:InvokeServer(unpack(args))
+			local args = {
+					[1] = "low_quality_textures",
+					[2] = true
+			}
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.toggle_setting:InvokeServer(unpack(args))
+			local args = {
+					[1] = "autoskip_waves",
+					[2] = true
+			}
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.toggle_setting:InvokeServer(unpack(args))
+			local args = {
+					[1] = "disable_auto_open_overhead",
+					[2] = true
+			}
+			game:GetService("ReplicatedStorage").endpoints.client_to_server.toggle_setting:InvokeServer(unpack(args))
+			--///////////////////////////////////////////////////////////////////////////////////////////////////--
 		end
 		break
 	end
 end))
 
---#endregion
+-- function autoload()
+-- 		pcall(function()
+-- 				if exec == "Synapse X" then
+-- 						syn.queue_on_teleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/iwhiteiwhite/iwhiteiwhite/main/ldScr.lua'))()")
+-- 					else
+-- 						queue_on_teleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/iwhiteiwhite/iwhiteiwhite/main/ldScr.lua'))()")
+-- 				end
+-- 		end)
+-- end
+-- autoload()
 
---#region AutoChallent
 
-coroutine.resume(coroutine.create(function()
-	while task.wait() do
-		if game.PlaceId == 8304191830 then
-			if getgenv().AutoChallenge then --challenge is not cleared
-				local inChallent = game.Workspace._CHALLENGES.Challenges:GetChildren()
-				for i, v in pairs(inChallent) do
-					local args = {
-						[1] = tostring(v.Name),
-					}
-					game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby :InvokeServer(unpack(args))
-				end
-				wait(30)
-			end
-		end
-	end
-end))
-
---#endregion
-
---#region Aoto JoinPortal
-
-coroutine.resume(coroutine.create(function()
-	while task.wait() do
-    if game.PlaceId == 8304191830 then
-      if getgenv().autoportal then 
-        for i, v in pairs(game:GetService("Workspace")["_PORTALS"].Lobbies:GetChildren()) do
-          local args = {
-            [1] = tostring(v.Name),
-          }
-          game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer(unpack(args))
-          task.wait(3) 
-        end
-        task.wait(5) --// Wait New Loop 
-      end
-    end
-	end
-end))
-
---#endregion
+--#endregion 
 
 --#region reconnect
 function auto_reconnect()
@@ -5571,7 +4480,11 @@ end
 auto_reconnect()
 --#endregion
 
+-- [[ จบฟังชั่นทั่วไป ]] --
+--------------------------------------------------
+
 --###### End Function ######--
+
 print("Project X Successfully Loaded!!")
 ---------------------------------------------------------------------
 
